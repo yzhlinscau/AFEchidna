@@ -1,2 +1,0 @@
-# myPackage
-Just for examples
