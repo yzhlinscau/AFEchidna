@@ -1,4 +1,4 @@
-Package: bdRpPlus
+Package: bdRPlus
 Type: Package
 Title: breedR plus Functions
 Depends: msm
