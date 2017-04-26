@@ -34,7 +34,8 @@ bdR.pin <- function(object,formula,signif=FALSE,digit=5) {
   formula<-as.formula(paste(dd[2],dd[3],sep=' ~ '))
   
   transform<-formula
-  aa<-object$var[,"Estimated variances"]
+  aa1<-bdR.var(object)
+  aa<-aa1[,"Estimated variances"]
   pframe <- as.list(aa)
   names(pframe) <- paste("x", seq(1, length(pframe)), sep = "")
   tvalue<-eval(deriv(transform[[length(transform)]], names(pframe)),pframe)
