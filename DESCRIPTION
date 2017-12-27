@@ -1,14 +1,17 @@
-Package: bdRPlus
+Package: AAfun0s
 Type: Package
-Title: breedR plus Functions
-Depends: msm
-Suggests: breedR
-Version: 1.01
-Date: 2017-4-30
+Title: ASReml-R(only) Added functions 
+Imports: graphics, dplyr
+Enhances: asreml
+SystemRequirements: asreml-R 3.x
+Version: 1.0
+Date: 2017-12-01
 Author: Yuanzhen Lin
 Maintainer: Yuanzhen Lin <yzhlinscau@163.com>
-Description: This package adds some functions added to breed packages.
-License: GPL-3
+Description: This package adds some functions added to ASReml-R package, functions including: asreml.batch() 
+ to carry out batch analysis in ASReml-R,pin() to count heritability or corr with se and output significent 
+ level for corr value, and model.comp() to compare models with different randomed factors for asrmel-R objects.
+License: GPL (>= 2)
 LazyData: yes
 NeedsCompilation: no
 Repository: CRAN
