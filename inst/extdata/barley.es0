@@ -1,0 +1,13 @@
+#!rename !AGRS 7 # 8 #1 2 3 4 5 6
+Slate Hall example
+  Rep 6
+  RowBlk 30
+  ColBlk 30 
+  row 10 
+  column 15
+  variety 25
+  yield
+barley.asd !skip 1
+
+
+

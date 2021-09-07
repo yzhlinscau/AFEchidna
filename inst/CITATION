@@ -1,0 +1,24 @@
+citHeader("To cite the AFEchidna package in publications, please use:")
+
+
+
+citEntry(entry="Article",
+
+	title="AFEchidna is a R package for genetic evaluation of plant and animal breeding datasets",
+
+	author=as.person("Zhang WH, Wei RY, Liu Y, Lin YZ"),
+
+	journal="BioRxiv",
+
+	year=2021,
+	
+	doi='10.1101/2021.06.24.449740',
+
+
+textVersion=paste("Zhang WH, Wei RY, Liu Y, Lin YZ. AFEchidna is a R package for genetic evaluation of plant and animal breeding datasets.",
+
+"BioRxiv. DOI: 10.1101/2021.06.24.449740.")
+
+
+
+)
