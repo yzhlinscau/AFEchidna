@@ -7,8 +7,8 @@
  # dir()
 
 ##  generate .es0 file
- get.es0.file(dat.file='fm.csv') # .es file
- get.es0.file(es.file='fm.es') # .es0 file
+# get.es0.file(dat.file='fm.csv') # .es file
+# get.es0.file(es.file='fm.es') # .es0 file
 
 ## running model
 res11<-echidna(h3~1+Rep,
