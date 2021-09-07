@@ -1,0 +1,19 @@
+#!WORK 2  !REN  !ARG  
+TITLE: fm  #!DOPART $1
+ # TreeID,Spacing,Rep,Fam,Plot,dj,dm,wd,h1,h2,h3,h4,h5 ...
+ # 80001,3,1,70048,1,0.334,0.405,0.358,29,130,239,420,630 ...
+TreeID  !I      # 80001
+Spacing !I       # 3
+Rep !I       # 1
+Fam !I       # 70048
+Plot !I       # 1
+dj        # 0.334
+dm        # 0.405
+wd        # 0.358
+h1        # 29
+h2        # 130
+h3        # 239
+h4        # 420
+h5        # 630
+# Verify data fields are correctly classified as factors (!A !I !P *) or variates
+fm.csv !SKIP 1 !filter Spacing !select  1
