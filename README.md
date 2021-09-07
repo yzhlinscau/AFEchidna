@@ -7,14 +7,14 @@ Added functions for Echidna in R
 
  This package AFEchidna adds some R functions for Echidna v-154. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use. 
 
-## INSTALL package
+## INSTALL AFEchidna package
 ``` r
 remotes::install_github('yzhlinscau/AFEchidna')
 
 AFEchidna::checkPack()  # check depended R packages
 ``` 
 
-## AAfun function
+## AFEchidna function
 
   - echidna() to run mixed model or batch analysis;
   - pin() to calculate heritability or corr with se;
@@ -32,4 +32,6 @@ demo('run.echidna')
 
 ```
 
+## more examples
 
+Will be updated in the future....
