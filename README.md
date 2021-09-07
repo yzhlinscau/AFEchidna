@@ -3,13 +3,15 @@
 # AFEchidna
 Added functions for Echidna in R
 
-## About AAfun
+## About AFEchidna
 
-The AAfun is builded on the base of package `'asreml'` for some additional functions, such as calculating standard error (se), running batch analysis, getting cov/var/corr matrix for FA models, etc. 
+ This package AFEchidna adds some R functions for Echidna v-154. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use. 
 
 ## INSTALL package
 ``` r
-remotes::install_github('yzhlinscau/AAfun')
+remotes::install_github('yzhlinscau/AFEchidna')
+
+AFEchidna::checkPack()  # check depended R packages
 ``` 
 
 ## AAfun function
@@ -24,7 +26,9 @@ remotes::install_github('yzhlinscau/AAfun')
 
 ## DEMO functions
 ``` r
+library(AFEchidna)
 
+demo('run.echidna')
 
 ```
 
