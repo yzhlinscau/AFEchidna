@@ -1,21 +1,30 @@
 ##
 ## demo file for bdR.pin et al. 
 ##
- library(bdRPlus)
- library(breedR)
- res.animal <- remlf90(fixed = phe_X ~ 1,
-                       random = ~ gg,
-                       genetic = list(model = 'add_animal',
-                       pedigree = globulus[, 1:3],
-                       id = 'self'),
-                       data = globulus)
+ library(AFEchidna)
+
+ AFEchidna::read.example(package='AFEchidna', setpath=TRUE)
+ # dir()
+
+##  generate .es0 file
+ get.es0.file(dat.file='fm.csv') # .es file
+ get.es0.file(es.file='fm.es') # .es0 file
+
+## running model
+res11<-echidna(h3~1+Rep,
+               weights='h1',
+               #family=esr_gaussian(),
+               random=~Fam,
+               residual=NULL,
+               #delf=F,foldN='res11',
+               es0.file="fm.es0")
  
  # output variance components
- bdR.var(res.animal)
+ Var(res11)
 
  # test trait's norm 
- bdR.plot(res.animal)
+ plot(res11)
 
  # calculate heritability 
- bdR.pin(res.animal, h2~V2/(V1+V2+V3))
+ pin11(res11,h2~V2*4/(V1+V2))
  
