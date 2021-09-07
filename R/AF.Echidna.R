@@ -272,6 +272,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                   predict=NULL,vpredict=NULL,
                   qualifier=NULL,jobqualf=NULL){
   
+  library(dplyr)
+  
   if(!is.null(trait)){
     #trait=~h3+h4+h5
     #trait=c(~h3,~h4,~h5)
