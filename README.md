@@ -94,4 +94,163 @@ lapply(res21b,Var)
 
 ```
 
+### two trait
+``` r
+res12<-echidna(cbind(h3,h4)~Trait+Trait:Rep,
+               random=~us(Trait):Fam,
+               residual=~units.us(Trait),
+               predict='Fam',mulT=T,
+               qualifier = '!filter Spacing !select 1',
+               es0.file="fm.es0")
+# variance componets
+Var(res12)
+
+# model diagnosis
+plot(res12,mulT=T)
+
+# for more than 2 parameters  
+pin(res12,mulp=c(gcor~V3/sqrt(V2*V4),
+                     ecor~V6/sqrt(V5*V7),
+                     h2A~V2*4/(V2+V5),
+                     VpA~V2+V5),signif=T)
+
+```
+
+### two trait--batch analysis
+``` r
+res22<-echidna(trait=~h2+h3+h4+h5,fixed=~Trait+Trait:Rep,
+                   random=~us(Trait):Fam,
+                   residual=~units:us(Trait),
+                   predict='Fam',
+                   batch=TRUE,mulT=TRUE,
+                   #run.purrr=TRUE,
+                   es0.file='fm.es0')
+
+names(res22)
+
+res22b<-b2s(res22)
+lapply(res22b,Var)
+
+```
+
+### multi-G structure analysis
+``` r
+res23<-echidna(es0.file="fm.es0",
+             fixed=h5~1+Rep,
+             random=c(G1~Fam,G2~Fam+Plot),
+             residual=~units,
+             batch.G=T,#run.purrr=T,
+             trace=T)
+
+
+res23b<-b2s(res23)
+
+lapply(res23b, Var)
+
+```
+
+### multi-R structure analysis
+``` r
+res24<-echidna(es0.file="MET.es0", 
+             fixed=yield~1+Loc,
+             random=~Genotype:Loc,
+             residual=c(R1~sat(Loc):ar1(Col):ar1(Row),
+                        R2~sat(Loc):units), 
+             batch.R=T, #run.purrr=T,
+             met=T)
+
+res24b<-b2s(res24)
+
+lapply(res24b, Var)
+
+```
+
+### spatial analysis
+``` r
+m2a<-echidna(yield~1,
+             random=~Variety+units,
+            residual=~ar1(Row):ar1(Column),
+            predict=c('Variety'),
+            es0.file="barley.es0")
+
+Var(m2a)
+plot(m2a)
+
+m2b<-update(m2a,random=~Variety) 
+
+model.comp(m2a,m2b,LRT=T)
+
+```
+
+
+### binomial trait
+``` r
+# parent model
+bp.esr<-echidna(lt ~ 1, random =~ Mum, 
+                family = esr_binomial(), 
+                es0.file = 'dfm2.es0' )
+
+Var(bp.esr)
+pin(bp.esr)
+pin11(bp.esr,h2~4*V2/(V1+V2)) 
+plot(bp.esr)
+
+bp2.esr<-echidna(cbind(lt,dis) ~ Trait, 
+                 random =~ us(Trait):Mum,
+                 residual=~ units:us(Trait),
+                family = c(esr_binomial(),esr_binomial()), 
+                mulT=TRUE,
+                es0.file = 'dfm2.es0' )
+
+Var(bp2.esr)
+
+bp3.esr<-echidna(cbind(h5,lt) ~ Trait, 
+                 random =~ us(Trait):Mum,
+                 residual=~ units:us(Trait),
+                 family = c(esr_gaussian(),esr_binomial()), 
+                 mulT=TRUE,
+                 es0.file = 'dfm2.es0' )
+
+Var(bp3.esr)
+
+# tree model
+bt.esr<-echidna(lt~1, random =~ nrm(TreeID), 
+                 family = esr_binomial(),
+                 es0.file = 'dfm2.es0' )
+
+Var(bt.esr)
+pin11(bt.esr,h2~V2/(V1+V2)) 
+
+
+bt2.esr<-echidna(cbind(lt,dis) ~ Trait, 
+                 random =~ us(Trait):nrm(TreeID),
+                 residual=~ units:us(Trait),
+                 family = c(esr_binomial(),esr_binomial()), 
+                 mulT=TRUE,
+                 es0.file = 'dfm2.es0' )
+
+Var(bt2.esr)
+
+bt3.esr<-echidna(cbind(h5,lt) ~ Trait, 
+                 random =~ us(Trait):nrm(TreeID),
+                 residual=~ units:us(Trait),
+                 family = c(esr_gaussian(),esr_binomial()), 
+                 mulT=TRUE,
+                 es0.file = 'dfm2.es0' )
+
+Var(bt3.esr)
+
+```
+
+### complex model
+
+``` r
+pm2<-echidna(weanwt~year+sex+weanage,
+             random=~str(~nrm(pig)+nrm(dam),~us(2):nrm(pig)),
+             es0.file='pig_data.es0')
+
+Var(pm2)
+
+```
+
 More examples will be updated in the future....
