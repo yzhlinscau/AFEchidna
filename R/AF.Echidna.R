@@ -272,7 +272,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                   predict=NULL,vpredict=NULL,
                   qualifier=NULL,jobqualf=NULL){
   
-  library(dplyr)
+  require(dplyr,warn.conflicts=FALSE,quietly=TRUE)
   
   if(!is.null(trait)){
     #trait=~h3+h4+h5
@@ -338,16 +338,10 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
         }
       }
       
-      #ss<-lapply(ttN, function(x){
-        # ss<- ttN %>% purrr::map( function(x){
       run.fun1 <- function(x){
         
         if(trace==TRUE & batch==TRUE) cat('\nrun',x,'-- -- --:')
-        #if(trace==TRUE & cycle==TRUE) cat('\nrun',x,'-- -- --:')
-        #x='h3'
         if(batch==FALSE) {
-          #if(cycle==FALSE) x=NULL
-          #else x=trait
           x <- trait
         }
         
@@ -357,7 +351,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
             if(bbn==1) x <- paste(bb,collapse=' ')
           }
         }
-        # AFEchidna::
+        
         AFEchidna::run.mod(es0.file=es0.file,softp=softp,
                            trait=x,family=family,#trait.mod=trait.mod,
                            weights=weights,
@@ -372,7 +366,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       if(run.purrr) ss <- lapply(ttN, run.fun1)
         else ss <- ttN %>% purrr::map( run.fun1 )
       
-      #tt1=res13b
+      #
       if(batch==FALSE) {
         ss <- ss[[1]]
         if(cycle==FALSE) NTrait <- ss$Traits
@@ -388,7 +382,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       NTrait <- gsub(' ','-',NTrait)
       NTrait <- sub('-$','',NTrait)
       
-      tt<-tt1<-NULL
+      tt <- tt1 <- NULL
       
       if(batch==FALSE) {
         tt <- ss
@@ -437,7 +431,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       run.fun2 <- function(x){
         #x=1
         if(trace==TRUE) cat('\nrun',x,'-- random effects:', ran1[x])
-        # AFEchidna::
+        # 
         if(!is.na(ran1[x]))
           AFEchidna::run.mod(es0.file=es0.file,softp=softp,
                   fixed=fixed,random=ran1[x],residual=residual,
@@ -646,10 +640,6 @@ run.mod <- function(es0.file,softp=NULL,
   
   if(met==TRUE) lmtxt<-gsub('Trait',' mu ',lmtxt)
   lmtxt<-gsub('~ mu 1','~ mu ',lmtxt)
-  # if(Fmv==TRUE){
-  #     lmtxt<-gsub('~ mu ','~ mu !f mv ',lmtxt)
-  #     lmtxt<-gsub('~ Trait ','~ Trait !f mv ',lmtxt)
-  # }
   
   ## weights
   if(!is.null(weights))
@@ -748,7 +738,6 @@ run.mod <- function(es0.file,softp=NULL,
     if(cycle==TRUE){
       nn<-length(df$esr.all)
       trt<-unlist(lapply(df$esr.all,function(x) x$Traits))
-      #cat('\nEchinda version: ',object$esr.all[[1]]$Version,'\n')
       
       for(i in 1:nn){
         cat('\n\nIteration procedure for trait: ',trt[i],'\n')
@@ -758,14 +747,15 @@ run.mod <- function(es0.file,softp=NULL,
       }
     }
     if(batch==TRUE){
+      
       trt<-unlist(lapply(df$res.all,function(x) x$Traits))
       
       trt<-gsub(' ','-',trt)
       trt<-sub('-$','',trt)
       
-      #preds$pred<-lapply(object$res.all,function(x) x$pred)
+      
       for(i in 1:length(trt)) {
-        #preds[[i]]<-object$res.all[[i]]$Iterations
+        
         cat('\n\nIteration procedure for trait: ',trt[i],'\n')
         cat('\n',df$res.all[[i]]$StartTime,'\n')
         print.data.frame(df$res.all[[i]]$Iterations)
@@ -914,20 +904,17 @@ b2s<-function(object){
 
 #' @export
 vcms.fun <- function(aa1,mulN) {
-  require(dplyr)
+  
+  require(dplyr,warn.conflicts=FALSE,quietly=TRUE)
   
   mat1<-diag(mulN)
-  #df.mat0<-reshape::melt(lower.tri(mat1,diag=F))
   df.mat1<-reshape::melt(lower.tri(mat1,diag=TRUE))
   
   for(i in 1:2) {
     #df.mat0[,i]<-paste0('t',df.mat0[,i])
     df.mat1[,i]<-paste0('t',df.mat1[,i])
   }
-  #df.mat1<-apply(df.mat1,2,function(x)paste0('t',x))
-  
-  #df.mat01<-df.mat0 %>% filter(.,value==T) %>% arrange(X1) %>% unite('tt',X1:X2,sep='.',remove=F)
-  #ttn0<-df.mat01$tt
+
   
   df.mat11<-df.mat1 %>% dplyr::filter(value==TRUE) %>% 
     dplyr::arrange(X1) %>% tidyr::unite('tt',X1:X2,sep='.',remove=F)
@@ -944,7 +931,6 @@ vcms.fun <- function(aa1,mulN) {
   aa1[grepl(';diag\\(Trait\\)',aa1)]<-paste(vgn,ttn0,sep='_')## genetic
   
   ## corgh
-  #ttn0<-paste0('t',1:mulN) # mulN=2
   aa1[grepl('units\\.corgh\\(Trait\\)',aa1)]<-paste0('units_',ttn0)# resid
   
   vcn.gen<-aa1[grepl('corgh\\(Trait\\)\\.',aa1)]  ## genetic
@@ -981,7 +967,6 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
     stop('Need package: readr.\n')
   if(!require(stringr,warn.conflicts=FALSE,quietly=TRUE))
     stop('Need package: stringr.\n')
-  #path=es0.path
 
   require(readr,warn.conflicts=FALSE,quietly=TRUE)
 
@@ -1076,13 +1061,8 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
       vpv.mat[upper.tri(vpv.mat,diag=TRUE)]<-vpv
       a<-vpv.mat
       a[lower.tri(a)]<-t(a)[lower.tri(a)]
-      # if(mulT==FALSE&cycle==FALSE) rownames(a)<-colnames(a)<-tt$vpc0$Term
-      # else
       rownames(a)<-colnames(a)<-paste0('V',1:nrow(vpc))
       vpv.mat<-a
-
-      #if(mulT==FALSE) tt$vpv.mat<-vpv.mat[tt$vpc$Term,tt$vpc$Term]
-      #else
       tt$vpv.mat<-vpv.mat
     } else tt$vpv<-vpv
 
@@ -1883,9 +1863,6 @@ pin33 <- function(fm=NULL,vpc=NULL,vc=NULL,vpv.mat=NULL,
   invAI <- vpv.mat
   se <- msm::deltamethod(transform,vc,invAI)
   
-  #tvalue<-round(tvalue,digit)
-  #se<-round(se,digit)
-  
   result<-data.frame(row.names =tname, Estimate=tvalue, SE=se)
   result$Term<-rownames(result)
   result<-result[,c('Term','Estimate','SE')]
@@ -2497,7 +2474,6 @@ coeff11 <- function(object,ranf) {
   
   ranf<-gsub('\\.',':',ranf)
   Term<-unique(coeft$Term)
-  #if(mulT==FALSE) fixf<-Term[1:which(Term=='mu')] else fixf<-Term[1:which(Term=='Trait')]
   fixf<-base::setdiff(Term,ranf)
   
   fixeff<-AFEchidna::filterD1(coeft,Term %in% fixf) #AFEchidna::
@@ -2552,9 +2528,8 @@ wald.esR<-function(object) {
     trt<-gsub(' ','-',trt)
     trt<-sub('-$','',trt)
     
-    #preds$pred<-lapply(object$res.all,function(x) x$pred)
     for(i in 1:length(trt)) {
-      #preds[[i]]<-object$res.all[[i]]$Iterations
+      
       cat('\nWald tests of fixed effects for trait: ',trt[i],'\n')
       cat(object$res.all[[i]]$waldT,'\n')
       cat('\n')
@@ -2564,8 +2539,6 @@ wald.esR<-function(object) {
 }
 
 ##
-# waldT(Bc.esr,term=c('mu','Loc'))
-# waldT(Bc.esr,term=c('mu','Loc'),numDF=c(1,1),Fv=c(5659.98,11.22))
 
 #' @export
 waldT <- function(object,...){
@@ -2865,9 +2838,7 @@ Var.AR<-function(object,delN=4){
   numv<-as.numeric(unlist(regmatches(object$keyres,
                                      gregexpr(patt, object$keyres, perl=TRUE))))
   
-  numm<-matrix(numv[-1:-delN],ncol=3,byrow=T)#,
-  #dimnames = list(c('units','pr','pc','Residual'),
-  #c('Gamma','Sigma','Zratio')))
+  numm<-matrix(numv[-1:-delN],ncol=3,byrow=T)#
   
   varcomp<-as.data.frame(numm)
   names(varcomp)<-c('Gamma','Sigma','Zratio')
@@ -3570,12 +3541,6 @@ GenomicRel <- function(marker,option=NULL,ped=NULL,Infv=10000,
 .GenomicRel <- function(marker, option=NULL,ped=NULL,Infv=10000,
                        Gm=NULL,G.adj=FALSE, Gres=TRUE){ # ,invG=FALSE
   
-  #  option 
-  #	1 - observed allele frequencies (GOF, VanRaden, 2008) 
-  #	2 - weighted markers by recipricals of expected variance (GD, Forni et al., 2011)
-  #	3 - allele frequencies fixed at 0.5 (G05, Forni et al., 2011)
-  #	4 - allele frequencies fixed at mean for each locus (G05, Forni et al., 2011)
-  #	5 - regression of MM' on A sort (Greg, VanRaden, 2008)
   
   #data
   #	column 1 - id
@@ -3589,6 +3554,7 @@ GenomicRel <- function(marker,option=NULL,ped=NULL,Infv=10000,
   
   #NO HEADERS on input tables
   #Returns G matrix in the following form: col1 = row, col2 = col, col3=Genomic relationship, col4=pedigree relationship
+  
   if(!require(GeneticsPed)){stop('Need package: GeneticsPed.\n')}
   
   cat('Generating G matrix is under going.\n')
@@ -3714,7 +3680,7 @@ GenomicRel <- function(marker,option=NULL,ped=NULL,Infv=10000,
 #' full additative matrix(A) and blended relationship matrix(H) from
 #' genotyped marker, genotyped pedigree and ungenotyped pedigree.
 #'  
-#' @usage AGH.inv(gmarker,option=1, ugped,gped) 
+#' @usage AGH.inv(gmarker,option=1, ugped, gped) 
 #' 
 #' @param option	 option (1~5) for different G matrixs.
 #' @param ugped	 ungenotyped pedigree, or total pedigree.
