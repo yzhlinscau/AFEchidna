@@ -32,6 +32,12 @@ demo('run.echidna')
 
 ```
 
+## workflow
+- (1) generate temple .es0 file;
+- (2) specify the mixed model;
+- (3) run program and check the results.
+
+
 ## more examples
 
 Will be updated in the future....
