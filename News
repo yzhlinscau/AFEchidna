@@ -1,0 +1,6 @@
+AFEchidna V1.54
+===========
+* Echidna version V 1.54;
+* Add purrr package function for batch analysis;
+* Fix problem when using at(Trait,1):Factor in fixed factors;
+......
