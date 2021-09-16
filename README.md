@@ -294,5 +294,5 @@ Var(pm2)
 More examples will be updated in the future....
 
 ## Citation
-Gilmour, A.R. (2021) Echidna Mixed Model Software www.EchidnaMMS.org
+Gilmour, A.R. (2021) Echidna Mixed Model Software www.EchidnaMMS.org                     
 Zhang WH, Wei RY, Liu Y, Lin YZ.(2021) AFEchidna is a R package for genetic evaluation of plant and animal breeding datasets. BioRxiv. DOI:10.1101/2021.06.24.449740.
