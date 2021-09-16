@@ -246,6 +246,40 @@ Var(bt3.esr)
 
 ```
 
+### gblup
+``` r
+G.marker<-read.csv(file="G.marker.csv",header=TRUE)
+GOF<-GenomicRel( G.marker,1, Gres=TRUE)
+write.csv(GOF,file='GOF.grm',row.names=F,quote=F)
+
+
+get.es0.file(dat.file='G.data.csv')
+get.es0.file(es.file='G.data.es')
+
+ablup<-echidna(t1~1+Site,random=~nrm(ID),
+            residual=~units,
+            predict=c('ID'),
+            es0.file="G.data.es0")
+
+Var(ablup)
+
+gblup<-update(ablup,random=~grm(ID))
+
+Var(gblup)
+
+## batch--Gblup
+# Gblup.mG<-update(ablup, random=c(G1~grm1(ID),
+#                                  G2~grm2(ID),
+#                                  G3~grm3(ID),
+#                                  G4~grm4(ID),
+#                                  G5~grm5(ID)),
+#                  batch.G=T)
+# 
+# Gblup.mG2<-b2s(Gblup.mG)
+# lapply(Gblup.mG2, Var)
+
+``` 
+
 ### complex model
 
 ``` r
