@@ -14,6 +14,10 @@ remotes::install_github('yzhlinscau/AFEchidna')
 AFEchidna::checkPack()  # check depended R packages
 ``` 
 
+## first user of AFEchidna or Echidna
+ If Echidna software is first time for user, user should register an email address as the method supplied in the manual (https://github.com/yzhlinscau/AFEchidna/blob/master/inst/doc/Simple%20Manual.pdf).
+
+
 ## AFEchidna function
 
   - echidna() to run mixed model or batch analysis;
