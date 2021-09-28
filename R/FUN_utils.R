@@ -138,7 +138,7 @@ id0<-function(){
 
 
 #' @export
-loadsoft <- function(update=FALSE){
+loadsoft <- function(update=FALSE, soft.path=NULL){
   
   path0 <- 'C:/ProgramData/Echidna.bin'#getwd() 
   softf <- paste0(path0,'/Echidna.exe')
@@ -152,7 +152,7 @@ loadsoft <- function(update=FALSE){
         file.remove(dir())
       } else dir.create(path0)
       
-      soft.path<-system.file('extdata/bin', package='AFEchidna')
+      if(is.null(soft.path)) soft.path<-system.file('extdata/bin', package='AFEchidna')
       setwd(soft.path)
       file.copy(from=dir(),to=path0, overwrite=TRUE)
       
