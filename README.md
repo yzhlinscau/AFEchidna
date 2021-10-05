@@ -14,7 +14,7 @@ remotes::install_github('yzhlinscau/AFEchidna')
 AFEchidna::checkPack()  # check depended R packages
 ``` 
 
-## first user of AFEchidna or Echidna
+## First user of AFEchidna or Echidna
  If Echidna software is first time for user, user should register an email address as the method supplied in the manual (https://github.com/yzhlinscau/AFEchidna/blob/master/inst/doc/Simple%20Manual.pdf).
 
 ## How to update new version of Echidna for AFEchidna
@@ -49,9 +49,9 @@ demo('run.echidna')
 - (3) run program and check the results.
 
 
-## more examples
+## More examples
 
-### single trait
+### Single trait
 ``` r
 # generate .es0 file
 # get.es0.file(dat.file='fm.csv') # .es file
@@ -89,7 +89,7 @@ head(pred$pred$pred1)
 pred$ased
 ```
 
-### single trait--batch analysis
+### Single trait--batch analysis
 ``` r
 res21<-echidna(trait=~h3+h4+h5,
                fixed=~1+Rep,
@@ -103,6 +103,16 @@ names(res21)
 res21b<-b2s(res21)
 lapply(res21b,Var)
 
+# second method--based on res11
+res11.bth <- update(res11,
+                    trait=~h1+h2+h3,
+                    batch=TRUE)
+
+Var(res11.bth)
+
+pin(res11.bth,mulp=c(h2~V2*4/(V2+V1),
+                 Vp~V2+V1),signif=T)
+
 ```
 
 ### two trait
@@ -110,7 +120,7 @@ lapply(res21b,Var)
 res12<-echidna(cbind(h3,h4)~Trait+Trait:Rep,
                random=~us(Trait):Fam,
                residual=~units.us(Trait),
-               predict='Fam',mulT=T,
+               predict='Fam',mulT=TRUE,
                qualifier = '!filter Spacing !select 1',
                es0.file="fm.es0")
 # variance componets
@@ -150,7 +160,7 @@ res23<-echidna(es0.file="fm.es0",
              fixed=h5~1+Rep,
              random=c(G1~Fam,G2~Fam+Plot),
              residual=~units,
-             batch.G=T,#run.purrr=T,
+             batch.G=TRUE,#run.purrr=TRUE,
              trace=T)
 
 
@@ -167,7 +177,7 @@ res24<-echidna(es0.file="MET.es0",
              random=~Genotype:Loc,
              residual=c(R1~sat(Loc):ar1(Col):ar1(Row),
                         R2~sat(Loc):units), 
-             batch.R=T, #run.purrr=T,
+             batch.R=TRUE, #run.purrr=TRUE,
              met=T)
 
 res24b<-b2s(res24)
@@ -189,7 +199,7 @@ plot(m2a)
 
 m2b<-update(m2a,random=~Variety) 
 
-model.comp(m2a,m2b,LRT=T)
+model.comp(m2a,m2b,LRT=TRUE)
 
 ```
 
@@ -280,14 +290,14 @@ Var(gblup)
 #                                  G3~grm3(ID),
 #                                  G4~grm4(ID),
 #                                  G5~grm5(ID)),
-#                  batch.G=T)
+#                  batch.G=TRUE)
 # 
 # Gblup.mG2<-b2s(Gblup.mG)
 # lapply(Gblup.mG2, Var)
 
 ``` 
 
-### complex model
+### Complex model
 
 ``` r
 pm2<-echidna(weanwt~year+sex+weanage,
@@ -295,6 +305,12 @@ pm2<-echidna(weanwt~year+sex+weanage,
              es0.file='pig_data.es0')
 
 Var(pm2)
+
+pm3<-echidna(fixed = cbind(weanwt,weight)~Trait:(year+sex+weanage+pen),            
+             random=~str(~Trait:nrm(pig)+Trait:dam,~us(4):nrm(pig)),
+             residual=~idv(units):us(Trait),
+             mulT = TRUE,
+             es0.file='pig_data.es0')
 
 ```
 
