@@ -1,0 +1,19 @@
+#!WORK 2  !REN  !ARG  
+TITLE: G.data  #!DOPART $1
+ # "ID","Female","Male","Year","Site","t1","t2" ...
+ # "26","1","12","2001","6",NA,NA ...
+ID  !P      # 26
+Female !I       # 1
+Male !I       # 12
+Year !I       # 2001
+Site !I       # 6
+t1        # *
+t2        # *
+# Verify data fields are correctly classified as factors (!A !I !P *) or variates
+G.ped.csv !SKIP 1
+GOF.grm  #G1
+GD.grm   #G2
+G05.grm  #G3
+GMF.grm  #G4
+Greg.grm !ND #G5
+G.data.csv !SKIP 1
