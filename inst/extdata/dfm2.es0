@@ -1,0 +1,24 @@
+#!WORK 2  !REN  !ARG
+TITLE: dfm2  #!DOPART $1
+ # TreeID,Mum,Dad,Spacing,Rep,Plot,dj,dm,wd,h1,h2,h3,h4,h5,dis,lt,str ...
+ # 80001,70048,NA,3,1,1,0.334,0.405,0.358,29,130,239,420,630,1,1,1 ...
+TreeID   !P # 80001
+Mum      !I # 70048
+Dad      !I # *
+Spacing  !I # 3
+Rep      !I # 1
+Plot      !I # 1
+dj       !* 10 # 0.334
+dm       !* 10 # 0.405
+wd        # 0.358
+h1       !* 0.1 # 29
+h2       !* 0.1 # 130
+h3       !* 0.1 # 239
+h4       !* 0.1 # 420
+h5       !* 0.1 # 630
+dis        # 1
+lt        # 1
+str        # 1
+# Verify data fields are correctly classified as factors (!A !I !P *) or variates
+dfm2.csv !SKIP 1
+dfm2.csv !SKIP 1 !filter Spacing !select 1
