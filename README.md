@@ -6,6 +6,7 @@ Added functions for Echidna in R
 ## About AFEchidna
 
  This package AFEchidna adds some R functions for Echidna v-154. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use. Echidna is targeted for use in animal and plant breeding contexts by Arthur Gilmour. The primary software of Echidna could be downloaded from website (https://www.echidnamms.org/). Echidna is free and a powerful tool for mixed models. AFEchidna is developed to run Echidna in R and similar to asreml at some extent.
+ The latest version of Echidna is V1.56 (https://www.echidnamms.org/downloads/). Updated: 2021-Oct-4th.
 
 ## Install AFEchidna package
 ``` r
