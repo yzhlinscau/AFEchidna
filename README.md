@@ -22,7 +22,7 @@ AFEchidna::checkPack()  # check depended R packages
 If AFEchidna does not have new version, while there is a new version of Echidna, user could download the  new version from Echidna website, and then copy the soft path to the fucntion loadsoft() to update Echidna for AFEchidna. A simple case as following:
 
 ``` r
-soft.path <- r"(D:\softs\Echidna\Echidna155\BIN)"
+soft.path <- r"(D:\softs\Echidna\Echidna157\BIN)"
 AFEchidna::loadsoft(update=TRUE,soft.path=soft.path)
 ```
 
@@ -34,7 +34,7 @@ AFEchidna::loadsoft(update=TRUE,soft.path=soft.path)
   - met.corr() to get cov/var/corr matrix for FA models;
   - met.plot() to plot MET data;
   - met.biplot() to run biplot for MET factor analytic results;
-  - etc...
+  - plot(), coef(), IC(), update(), predict(), ...
 
 ## DEMO functions
 ``` r
