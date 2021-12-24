@@ -163,7 +163,8 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
   }
   if(!is.null(es.file)){
     
-    if(!file.exists(es.file)) stop('es file does not exist.')
+    if(!file.exists(es.file)) 
+      stop('es file does not exist.\n Error reason: Echidna may not work.')
     
     if (!is.null(path)) path0<-path 
     else path0<-getwd()
