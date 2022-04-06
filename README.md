@@ -6,7 +6,7 @@ Added functions for Echidna in R
 ## About AFEchidna
 
  This package AFEchidna adds some R functions for Echidna v-1.54. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use. Echidna is targeted for use in animal and plant breeding contexts by Arthur Gilmour. The primary software of Echidna could be downloaded from website (https://www.echidnamms.org/). Echidna is free and a powerful tool for mixed models. AFEchidna is developed to run Echidna in R and similar to asreml at some extent.           
-  The latest version of Echidna is V-1.57 (https://www.echidnamms.org/downloads/). Updated: 2021-Dec-8th.
+  The latest version of Echidna is V-1.62 (https://www.echidnamms.org/downloads/). Updated: 2022-Mar-22th.
 
 ## Install AFEchidna package
 ``` r
@@ -96,7 +96,7 @@ res21<-echidna(trait=~h3+h4+h5,
                fixed=~1+Rep,
                random=~Fam,
                residual=~units,
-               batch=TRUE,#run.purrr=T,
+               batch=TRUE,#run.purrr=TRUE,
                es0.file='fm.es0')
 
 names(res21)
@@ -112,7 +112,7 @@ res11.bth <- update(res11,
 Var(res11.bth)
 
 pin(res11.bth,mulp=c(h2~V2*4/(V2+V1),
-                 Vp~V2+V1),signif=T)
+                 Vp~V2+V1),signif=TRUE)
 
 ```
 
@@ -134,7 +134,7 @@ plot(res12,mulT=T)
 pin(res12,mulp=c(gcor~V3/sqrt(V2*V4),
                      ecor~V6/sqrt(V5*V7),
                      h2A~V2*4/(V2+V5),
-                     VpA~V2+V5),signif=T)
+                     VpA~V2+V5),signif=TRUE)
 
 ```
 
@@ -162,11 +162,10 @@ res23<-echidna(es0.file="fm.es0",
              random=c(G1~Fam,G2~Fam+Plot),
              residual=~units,
              batch.G=TRUE,#run.purrr=TRUE,
-             trace=T)
+             trace=TRUE)
 
 
 res23b<-b2s(res23)
-
 lapply(res23b, Var)
 
 ```
@@ -179,10 +178,9 @@ res24<-echidna(es0.file="MET.es0",
              residual=c(R1~sat(Loc):ar1(Col):ar1(Row),
                         R2~sat(Loc):units), 
              batch.R=TRUE, #run.purrr=TRUE,
-             met=T)
+             met=TRUE)
 
 res24b<-b2s(res24)
-
 lapply(res24b, Var)
 
 ```
