@@ -140,6 +140,8 @@ id0<-function(){
 #' @export
 loadsoft <- function(update=FALSE, soft.path=NULL){
   
+  org.path <- getwd()
+  
   path0 <- 'C:/ProgramData/Echidna.bin'#getwd() 
   softf <- paste0(path0,'/Echidna.exe')
     
@@ -163,7 +165,8 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
        cat('Echidna software has been updated to the latest version:',vfile,'.\n')
       
   }
-    
+  setwd(org.path) 
+  
   invisible(softf)
 }
 
@@ -172,13 +175,15 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
 # loadsoft(update=T)
 
 #' @export
-nfile.copy <- function(version=153) {
+nfile.copy <- function(version=153, path0=NULL, path1=NULL) {
   
-  path0<-'D:\\myworks\\myRpackages\\public\\AFEchidna\\inst\\extdata\\bin'
+  if(is.null(path0))
+   path0<-'D:\\myworks\\myRpackages\\public\\AFEchidna\\inst\\extdata\\bin'
   old.file<-dir(path0)
   setwd(path0)
   file.remove(old.file)
-  path1<-paste0('D:\\softs\\ASReml\\Echidna\\Echidna',version,'\\BIN')
+  if(is.null(path1))
+   path1<-paste0('D:\\softs\\ASReml\\Echidna\\Echidna',version,'\\BIN')
   setwd(path1)
   all.file<-dir()
   for(i in 1:length(all.file))
