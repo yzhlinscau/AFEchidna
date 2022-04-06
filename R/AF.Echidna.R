@@ -2380,8 +2380,6 @@ predict0<-function(object){
 }
 
 
-
-
 #' @export
 coef <- function(object){
   UseMethod("coef",object)
@@ -2549,38 +2547,53 @@ waldT <- function(object,...){
 #' @export  waldT.esR
 #' @rdname  AF.Echidna
 #' @export
-waldT.esR<-function(object,term,numDF=NULL,Fv=NULL){
+waldT.esR<-function (object, term=NULL,ncol=NULL) 
+{  
+  if(is.null(term)){
+    waldT2<-strsplit(object$waldT,'P-inc \r\n')[[1]][2]
+    term<-unlist(regmatches(waldT2, 
+                      gregexpr("[A-Za-z]+\\.?\\w+", 
+                               waldT2, perl = TRUE)))
+  }
+  term<-gsub('\\.','\\:',term) # change . to : in R
+  n <- length(term)
   
-  denDF<-object$Residual.DF
-  
-  n<-length(term)
-  
-  if(is.null(numDF)&is.null(Fv)){
-    waldTv<-as.numeric(unlist(regmatches(object$waldT,
-                                         gregexpr("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?",
-                                                  object$waldT, perl=TRUE))))
-    wv<-matrix(waldTv,nrow=2)
-    wv<-data.frame(wv)
-    numDF<-as.numeric(as.character(wv[1,]))
-    Fv<-as.numeric(as.character(wv[2,]))
+  waldTv <- as.numeric(unlist(regmatches(object$waldT, 
+                                         gregexpr("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?", 
+                                                  object$waldT, perl = TRUE))))
+  if (object$org.par$mulT) { # TRUE
+    if(is.null(ncol)) ncol <- 2
+    wv <- matrix(waldTv, ncol = ncol, byrow=TRUE) # ncol=2
+    wv <- data.frame(wv)
+    
+    denDF <- rep(object$Residual.DF,n)
+    numDF <- as.numeric(as.character(wv[,1]))
+    Fv <- as.numeric(as.character(wv[,2]))
+  } else { #F: single trait
+    if(is.null(ncol)) ncol <- 5
+    wv <- matrix(waldTv, ncol = ncol, byrow=TRUE) # ncol=5
+    wv <- data.frame(wv) 
+    
+    numDF <- as.numeric(as.character(wv[,1]))
+    denDF <- as.numeric(as.character(wv[,2]))
+    Fv <- as.numeric(as.character(wv[,3]))
   }
   
-  pv<-NULL
-  for(i in seq(1,n))
-    pv[i]<-1-pchisq(Fv[i],numDF[i])
-    #pv[i]<-pf(Fv[i], numDF[i], denDF, lower.tail = FALSE)
-  
-  tab <- matrix(nrow=n,ncol=3)
-  tab[,1] <- numDF
-  #tab[,2] <- denDF
-  tab[,2] <- Fv
-  tab[,3] <- pv
+  pv <- NULL
+  for (i in seq(1, n)) #pv[i] <- 1 - pchisq(Fv[i], numDF[i])
+    pv[i] <- pf(Fv[i], numDF[i],denDF[i],lower.tail=FALSE)
+  tab <- matrix(nrow = n, ncol = 3)
+  tab[, 1] <- numDF[1:n]
+  tab[, 2] <- Fv[1:n]
+  tab[, 3] <- pv[1:n]
   tab <- data.frame(tab)
-  heading <- 'Wald tests for fixed effects:\n'
+  tab[, 2] <- tab[, 1] * tab[, 2] 
+  heading <- "Wald tests for fixed effects:\n"
   attr(tab, "heading") <- heading
-  attr(tab, "names") <- c("DF","Wald-F","Pr(Chisq)")
+  attr(tab, "names") <- c("DF", "Wald-F", 
+                          "Pr(Chisq)")
   attr(tab, "row.names") <- term
-  class(tab) <- c("anova","data.frame")
+  class(tab) <- c("anova", "data.frame")
   return(tab)
 }
 
