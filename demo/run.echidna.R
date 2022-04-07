@@ -12,7 +12,7 @@
 
 ## running model
 res11<-echidna(h3~1+Rep,
-               weights='h1',
+               weights=~h1,
                #family=esr_gaussian(),
                random=~Fam,
                residual=NULL,
