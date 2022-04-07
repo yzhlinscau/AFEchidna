@@ -1,7 +1,7 @@
 ##
-## demo file for bdR.pin et al. 
+## demo file for echidna et al. 
 ##
- library(AFEchidna)
+## library(AFEchidna)
 
  AFEchidna::read.example(package='AFEchidna', setpath=TRUE)
  # dir()
