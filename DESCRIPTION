@@ -1,10 +1,10 @@
 Package: AFEchidna
 Type: Package
 Title: Added Functions for Echidna
-Version: 1.54
+Version: 1.62
 Author: Yuanzhen Lin
 Maintainer: Yuanzhen Lin <yzhlinscau@163.com>
-Description: This package adds some R functions for Echidna v-154. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use.
+Description: This package adds some R functions for Echidna v-1.62. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use.
 Depends: R (>= 4.0.0)
 Imports:  dplyr, msm, readr,reshape, stringr,tidyr,utils, stats,MASS
 Suggests:  agricolae,amap,desplot, DT, GeneticsPed, ggplot2, knitr, nadiv,pedigree
