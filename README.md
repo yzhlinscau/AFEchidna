@@ -57,7 +57,7 @@ demo('run.echidna')
 # generate .es0 file
 # get.es0.file(dat.file='fm.csv') # .es file
 # get.es0.file(es.file='fm.es') # .es0 file
-# file.edit('fm.es') # check and edit .es0 file
+# file.edit('fm.es0') # check and edit .es0 file
 
 res11<-echidna(h3~1+Rep,
                random=~Fam,
