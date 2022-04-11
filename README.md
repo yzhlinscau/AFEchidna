@@ -1,5 +1,7 @@
 [![DOI](https://zenodo.org/badge/115507374.svg)](https://zenodo.org/badge/latestdoi/115507374)
 
+update: 11th-04-2022
+
 # AFEchidna
 Added functions for Echidna in R
 
@@ -299,13 +301,13 @@ Var(gblup)
 ### 8.10 selfing model
 
 ``` r
-// A traditional model
+# A traditional model
 sfm<-echidna(height~1+Prov,
              random=~ nrm(Treeid)+Block,
              es0.file='pine_provenance.es0')
 Var(sfm)
 
-// A self=0.1 model
+# A self=0.1 model
 sfm.s1<-update(sfm,selfing=0.1)
 Var(sfm.s1)
 
