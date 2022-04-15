@@ -5,23 +5,45 @@ update: 11th-04-2022
 # AFEchidna
 Added functions for Echidna in R
   
+## Contents
 
-## 1 About AFEchidna
+-   [Introduction](#introduction)
+
+-   [Installation](#installation)
+
+-   [First user](#first-user)
+
+-   [Software update](#software-update)
+
+-   [Main function](#main-function)
+
+-   [DEMO](#demo)
+
+-   [Workflow](#workflow)
+
+-   [Usage](#usage)
+
+    -   [Single trait](#single-trait)
+
+-   [Citation](#citation)
+
+
+### Introduction
 
  This package AFEchidna adds some R functions for Echidna v-1.62. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use. Echidna is targeted for use in animal and plant breeding contexts by Arthur Gilmour. The primary software of Echidna could be downloaded from website (https://www.echidnamms.org/). Echidna is free and a powerful tool for mixed models. AFEchidna is developed to run Echidna in R and similar to asreml at some extent.           
   The latest version of Echidna is V-1.62 (https://www.echidnamms.org/downloads/). Updated: 2022-Mar-22th.
 
-## 2 Install AFEchidna package
+### Installation
 ``` r
 remotes::install_github('yzhlinscau/AFEchidna')
 
 AFEchidna::checkPack()  # check depended R packages
 ``` 
 
-## 3 First user of AFEchidna or Echidna
+### First user
  If Echidna software is first time for user, user should register an email address as the method supplied in the manual (https://github.com/yzhlinscau/AFEchidna/blob/master/inst/doc/AFEchidna.Man.pdf).
 
-## 4 How to update new version of Echidna for AFEchidna
+### Software update
 If AFEchidna does not have new version, while there is a new version of Echidna, user could download the  new version from Echidna website, and then copy the soft path to the fucntion loadsoft() to update Echidna for AFEchidna. A simple case as following:
 
 ``` r
@@ -29,7 +51,7 @@ soft.path <- r"(D:\softs\Echidna\Echidna157\BIN)"
 AFEchidna::loadsoft(update=TRUE,soft.path=soft.path)
 ```
 
-## 5 AFEchidna function
+### Main function
 
   - echidna() to run mixed model or batch analysis;
   - pin() to calculate heritability or corr with se;
@@ -39,7 +61,7 @@ AFEchidna::loadsoft(update=TRUE,soft.path=soft.path)
   - met.biplot() to run biplot for MET factor analytic results;
   - plot(), coef(), IC(), update(), predict(), ...
 
-## 6 DEMO functions
+### DEMO
 ``` r
 library(AFEchidna)
 
@@ -47,15 +69,15 @@ demo('run.echidna')
 
 ```
 
-## 7 AFEchidna workflow
+### Workflow
 - (1) generate temple .es0 file;
 - (2) specify the mixed model;
 - (3) run program and check the results.
 
 
-## 8 More examples
+### Usage
 
-### 8.1 Single trait
+#### Single trait
 ``` r
 # generate .es0 file
 # get.es0.file(dat.file='fm.csv') # .es file
@@ -93,7 +115,7 @@ head(pred$pred$pred1)
 pred$ased
 ```
 
-### 8.2 Single trait--batch analysis
+#### 8.2 Single trait--batch analysis
 ``` r
 res21<-echidna(trait=~h3+h4+h5,
                fixed=~1+Rep,
@@ -119,7 +141,7 @@ pin(res11.bth,mulp=c(h2~V2*4/(V2+V1),
 
 ```
 
-### 8.3 two trait
+#### 8.3 two trait
 ``` r
 res12<-echidna(cbind(h3,h4)~Trait+Trait:Rep,
                random=~us(Trait):Fam,
@@ -141,7 +163,7 @@ pin(res12,mulp=c(gcor~V3/sqrt(V2*V4),
 
 ```
 
-### 8.4 two trait--batch analysis
+#### 8.4 two trait--batch analysis
 ``` r
 res22<-echidna(trait=~h2+h3+h4+h5,fixed=~Trait+Trait:Rep,
                    random=~us(Trait):Fam,
@@ -158,7 +180,7 @@ lapply(res22b,Var)
 
 ```
 
-### 8.5 multi-G structure analysis
+#### 8.5 multi-G structure analysis
 ``` r
 res23<-echidna(es0.file="fm.es0",
              fixed=h5~1+Rep,
@@ -173,7 +195,7 @@ lapply(res23b, Var)
 
 ```
 
-### 8.6 multi-R structure analysis
+#### 8.6 multi-R structure analysis
 ``` r
 res24<-echidna(es0.file="MET.es0", 
              fixed=yield~1+Loc,
@@ -188,7 +210,7 @@ lapply(res24b, Var)
 
 ```
 
-### 8.7 spatial analysis
+#### 8.7 spatial analysis
 ``` r
 m2a<-echidna(yield~1,
              random=~Variety+units,
@@ -206,7 +228,7 @@ model.comp(m2a,m2b,LRT=TRUE)
 ```
 
 
-### 8.8 binomial trait
+#### 8.8 binomial trait
 ``` r
 # parent model
 bp.esr<-echidna(lt ~ 1, random =~ Mum, 
@@ -265,7 +287,7 @@ Var(bt3.esr)
 
 ```
 
-### 8.9 gblup
+#### 8.9 gblup
 ``` r
 G.marker<-read.csv(file="G.marker.csv",header=TRUE)
 GOF<-GenomicRel( G.marker,1, Gres=TRUE)
@@ -299,7 +321,7 @@ Var(gblup)
 
 ```
 
-### 8.10 selfing model
+#### 8.10 selfing model
 
 ``` r
 # A traditional model
@@ -314,7 +336,7 @@ Var(sfm.s1)
 
 ``` 
 
-### 8.11 Complex model
+#### 8.11 Complex model
 
 ``` r
 pm2<-echidna(weanwt~year+sex+weanage,
@@ -333,6 +355,6 @@ pm3<-echidna(fixed = cbind(weanwt,weight)~Trait:(year+sex+weanage+pen),
 
 More examples will be updated in the future....
 
-## 9 Citation
+### Citation
 Gilmour, A.R. (2021) Echidna Mixed Model Software www.EchidnaMMS.org                     
 Zhang WH, Wei RY, Liu Y, Lin YZ.(2021) AFEchidna is a R package for genetic evaluation of plant and animal breeding datasets. BioRxiv. DOI:10.1101/2021.06.24.449740.
