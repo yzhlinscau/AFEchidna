@@ -126,8 +126,8 @@ res21<-echidna(trait=~h3+h4+h5,
 
 names(res21)
 
-res21b<-b2s(res21)
-lapply(res21b,Var)
+res21 %>% b2s %>% lapply(., Var)
+#res21b<-b2s(res21);lapply(res21b,Var)
 
 # second method--based on res11
 res11.bth <- update(res11,
@@ -175,8 +175,8 @@ res22<-echidna(trait=~h2+h3+h4+h5,fixed=~Trait+Trait:Rep,
 
 names(res22)
 
-res22b<-b2s(res22)
-lapply(res22b,Var)
+res22 %>% b2s %>% lapply(., Var)
+#res22b<-b2s(res22);lapply(res22b,Var)
 
 ```
 
@@ -189,9 +189,8 @@ res23<-echidna(es0.file="fm.es0",
              batch.G=TRUE,#run.purrr=TRUE,
              trace=TRUE)
 
-
-res23b<-b2s(res23)
-lapply(res23b, Var)
+res23 %>% b2s %>% lapply(., Var)
+#res23b<-b2s(res23);lapply(res23b, Var)
 
 ```
 
@@ -205,8 +204,8 @@ res24<-echidna(es0.file="MET.es0",
              batch.R=TRUE, #run.purrr=TRUE,
              met=TRUE)
 
-res24b<-b2s(res24)
-lapply(res24b, Var)
+res24 %>% b2s %>% lapply(., Var)
+#res24b<-b2s(res24);lapply(res24b, Var)
 
 ```
 
