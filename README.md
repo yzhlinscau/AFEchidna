@@ -90,7 +90,7 @@ res11<-echidna(h3~1+Rep,
                es0.file="fm.es0")
 
 # variance componets
-Var(res11)
+Var(res11) # or summary(res11)$varcomp
 
 # only one parameter
 pin11(res11,h2~V2*4/(V1+V2))
@@ -182,12 +182,12 @@ res22 %>% b2s %>% lapply(., Var)
 
 #### 8.5 multi-G structure analysis
 ``` r
-res23<-echidna(es0.file="fm.es0",
-             fixed=h5~1+Rep,
+res23<-echidna(fixed=h5~1+Rep,
              random=c(G1~Fam,G2~Fam+Plot),
              residual=~units,
              batch.G=TRUE,#run.purrr=TRUE,
-             trace=TRUE)
+             trace=TRUE,
+             es0.file="fm.es0")
 
 res23 %>% b2s %>% lapply(., Var)
 #res23b<-b2s(res23);lapply(res23b, Var)
@@ -196,13 +196,13 @@ res23 %>% b2s %>% lapply(., Var)
 
 #### 8.6 multi-R structure analysis
 ``` r
-res24<-echidna(es0.file="MET.es0", 
-             fixed=yield~1+Loc,
+res24<-echidna(fixed=yield~1+Loc,
              random=~Genotype:Loc,
              residual=c(R1~sat(Loc):ar1(Col):ar1(Row),
                         R2~sat(Loc):units), 
              batch.R=TRUE, #run.purrr=TRUE,
-             met=TRUE)
+             met=TRUE,
+             es0.file="MET.es0")
 
 res24 %>% b2s %>% lapply(., Var)
 #res24b<-b2s(res24);lapply(res24b, Var)
@@ -211,11 +211,11 @@ res24 %>% b2s %>% lapply(., Var)
 
 #### 8.7 spatial analysis
 ``` r
-m2a<-echidna(yield~1,
+m2a<-echidna(fixed=yield~1,
              random=~Variety+units,
-            residual=~ar1(Row):ar1(Column),
-            predict=c('Variety'),
-            es0.file="barley.es0")
+             residual=~ar1(Row):ar1(Column),
+             predict=c('Variety'),
+             es0.file="barley.es0")
 
 Var(m2a)
 plot(m2a)
@@ -230,7 +230,7 @@ model.comp(m2a,m2b,LRT=TRUE)
 #### 8.8 binomial trait
 ``` r
 # parent model
-bp.esr<-echidna(lt ~ 1, random =~ Mum, 
+bp.esr<-echidna(fixed=lt ~ 1, random =~ Mum, 
                 family = esr_binomial(), 
                 es0.file = 'dfm2.es0' )
 
@@ -239,16 +239,16 @@ pin(bp.esr)
 pin11(bp.esr,h2~4*V2/(V1+V2)) 
 plot(bp.esr)
 
-bp2.esr<-echidna(cbind(lt,dis) ~ Trait, 
+bp2.esr<-echidna(fixed=cbind(lt,dis) ~ Trait, 
                  random =~ us(Trait):Mum,
                  residual=~ units:us(Trait),
-                family = c(esr_binomial(),esr_binomial()), 
-                mulT=TRUE,
-                es0.file = 'dfm2.es0' )
+                 family = c(esr_binomial(),esr_binomial()), 
+                 mulT=TRUE,
+                 es0.file = 'dfm2.es0' )
 
 Var(bp2.esr)
 
-bp3.esr<-echidna(cbind(h5,lt) ~ Trait, 
+bp3.esr<-echidna(fixed=cbind(h5,lt) ~ Trait, 
                  random =~ us(Trait):Mum,
                  residual=~ units:us(Trait),
                  family = c(esr_gaussian(),esr_binomial()), 
@@ -258,15 +258,15 @@ bp3.esr<-echidna(cbind(h5,lt) ~ Trait,
 Var(bp3.esr)
 
 # tree model
-bt.esr<-echidna(lt~1, random =~ nrm(TreeID), 
-                 family = esr_binomial(),
-                 es0.file = 'dfm2.es0' )
+bt.esr<-echidna(fixed=lt~1, random =~ nrm(TreeID), 
+                family = esr_binomial(),
+                es0.file = 'dfm2.es0' )
 
 Var(bt.esr)
 pin11(bt.esr,h2~V2/(V1+V2)) 
 
 
-bt2.esr<-echidna(cbind(lt,dis) ~ Trait, 
+bt2.esr<-echidna(fixed=cbind(lt,dis) ~ Trait, 
                  random =~ us(Trait):nrm(TreeID),
                  residual=~ units:us(Trait),
                  family = c(esr_binomial(),esr_binomial()), 
@@ -275,7 +275,7 @@ bt2.esr<-echidna(cbind(lt,dis) ~ Trait,
 
 Var(bt2.esr)
 
-bt3.esr<-echidna(cbind(h5,lt) ~ Trait, 
+bt3.esr<-echidna(fixed=cbind(h5,lt) ~ Trait, 
                  random =~ us(Trait):nrm(TreeID),
                  residual=~ units:us(Trait),
                  family = c(esr_gaussian(),esr_binomial()), 
@@ -296,10 +296,10 @@ write.csv(GOF,file='GOF.grm',row.names=F,quote=F)
 get.es0.file(dat.file='G.data.csv')
 get.es0.file(es.file='G.data.es')
 
-ablup<-echidna(t1~1+Site,random=~nrm(ID),
-            residual=~units,
-            predict=c('ID'),
-            es0.file="G.data.es0")
+ablup<-echidna(fixed=t1~1+Site,random=~nrm(ID),
+               residual=~units,
+               predict=c('ID'),
+               es0.file="G.data.es0")
 
 Var(ablup)
 
@@ -324,7 +324,7 @@ Var(gblup)
 
 ``` r
 # A traditional model
-sfm<-echidna(height~1+Prov,
+sfm<-echidna(fixed=height~1+Prov,
              random=~ nrm(Treeid)+Block,
              es0.file='pine_provenance.es0')
 Var(sfm)
@@ -338,7 +338,7 @@ Var(sfm.s1)
 #### 8.11 Complex model
 
 ``` r
-pm2<-echidna(weanwt~year+sex+weanage,
+pm2<-echidna(fixed=weanwt~year+sex+weanage,
              random=~str(~nrm(pig)+nrm(dam),~us(2):nrm(pig)),
              es0.file='pig_data.es0')
 
