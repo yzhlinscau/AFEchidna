@@ -1,9 +1,12 @@
 [![DOI](https://zenodo.org/badge/115507374.svg)](https://zenodo.org/badge/latestdoi/115507374) <img src="https://img.shields.io/badge/license-GPL3.0-blue.svg" /> <img src="https://img-blog.csdnimg.cn/f2f5ec98035d488a863ee00003b93689.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAeXpobGluc2NhdQ==,size_1,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="logo-blupADC"  height="250" align="right"/>  
 
+version: v1.62       
 update: 11th-04-2022
 
 # AFEchidna
-Added functions for Echidna in R
+Added functions for Echidna in R        
+
+Note: The source codes of AFEchidna package are programmed under windows operating system, i.e., it may be not worked under other systems like Linux or Mac.
   
 ## Contents
 
