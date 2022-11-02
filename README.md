@@ -148,7 +148,7 @@ pin(res11.bth,mulp=c(h2~V2*4/(V2+V1),
 ``` r
 res12<-echidna(cbind(h3,h4)~Trait+Trait:Rep,
                random=~us(Trait):Fam,
-               residual=~units.us(Trait),
+               residual=~units:us(Trait),
                predict='Fam',mulT=TRUE,
                qualifier = '!filter Spacing !select 1',
                es0.file="fm.es0")
