@@ -13,6 +13,7 @@
 #' @param trace	  show iteration procedure,FALSE(default). 
 #' @param maxit   maximum number of iterations, 30(default).
 #' @param Fmv     make missing values into fixed terms, TRUE(default).
+#' @param mu.delete     delete term mu or Trait from model, FALSE(default).
 #' @param mulT	  multi-trait model,FALSE(default).
 #' @param met	    multi-environment trial model,FALSE(default).
 #' @param mulN	  trait number for multi-trait analysis at one time, 2(default).
@@ -254,7 +255,8 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
 #'                    trait,family,weights, 
 #'                    es0.file,softp,  
 #'                    delf,foldN,
-#'                    trace,maxit,Fmv,
+#'                    trace,maxit,
+#'                    Fmv,mu.delete,
 #'                    mulT,met,cycle,
 #'                    batch,mulN,mulp,
 #'                    batch.G,batch.R,
@@ -267,7 +269,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                   weights=NULL,
                   es0.file,softp=NULL,
                   delf=TRUE,foldN=NULL,
-                  trace=TRUE,maxit=30,Fmv=TRUE,
+                  trace=TRUE,maxit=30,
+                  Fmv=TRUE,mu.delete=FALSE,
                   mulT=FALSE,met=FALSE,cycle=FALSE,
                   batch=FALSE,mulN=NULL,mulp=NULL, 
                   batch.G=FALSE,batch.R=FALSE,
@@ -364,7 +367,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                            mulT=mulT,met=met,selfing=selfing,
                            trace=trace,delf=delf,foldN=foldN,
                            predict=predict,vpredict=vpredict,
-                           maxit=maxit,cycle=cycle,Fmv=Fmv,
+                           maxit=maxit,cycle=cycle,
+                           Fmv=Fmv,mu.delete=mu.delete,
                            qualifier=qualifier,jobqualf=jobqualf)
        } 
         
@@ -406,7 +410,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     fixed=fixed,random=random,residual=residual,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
-                    Fmv=Fmv,cycle=cycle,batch=batch,
+                    Fmv=Fmv,mu.delete=mu.delete,
+                    cycle=cycle,batch=batch,
                     batch0=batch0,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
@@ -445,7 +450,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                   mulT=mulT,met=met,selfing=selfing,
                   trace=trace,delf=delf,foldN=foldN,
                   predict=predict,vpredict=vpredict,
-                  maxit=maxit,cycle=cycle,Fmv=Fmv,
+                  maxit=maxit,cycle=cycle,
+                  Fmv=Fmv,mu.delete=mu.delete,
                   qualifier=qualifier,jobqualf=jobqualf)
         else
           AFEchidna::run.mod(es0.file=es0.file,softp=softp,#trait=x,
@@ -453,7 +459,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                              mulT=mulT,met=met,selfing=selfing,
                              trace=trace,delf=delf,foldN=foldN,
                              predict=predict,vpredict=vpredict,
-                             maxit=maxit,cycle=cycle,Fmv=Fmv,
+                             maxit=maxit,cycle=cycle,
+                             Fmv=Fmv,mu.delete=mu.delete,
                              #batch0=batch0,
                              qualifier=qualifier,jobqualf=jobqualf)
       
@@ -477,7 +484,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     met=met,trace=trace,delf=delf,
                     #batch=TRUE,
                     batch0=batch0,batch=batch,
-                    cycle=cycle,Fmv=Fmv,
+                    cycle=cycle,
+                    Fmv=Fmv,mu.delete=mu.delete,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
                     predict=predict,vpredict=vpredict,
@@ -515,7 +523,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                            mulT=mulT,met=met,selfing=selfing,
                            trace=trace,delf=delf,foldN=foldN,
                            predict=predict,vpredict=vpredict,
-                           maxit=maxit,cycle=cycle,Fmv=Fmv,
+                           maxit=maxit,cycle=cycle,
+                           Fmv=Fmv,mu.delete=mu.delete,
                            qualifier=qualifier,jobqualf=jobqualf)
 
       }
@@ -536,7 +545,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     fixed=fixed,random=random,residual=residual,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
-                    Fmv=Fmv,cycle=cycle,
+                    Fmv=Fmv,mu.delete=mu.delete,
+                    cycle=cycle,
                     #batch=TRUE,
                     batch0=batch0,batch=batch,
                     call=call,run.purrr=run.purrr,
@@ -568,7 +578,8 @@ run.mod <- function(es0.file,softp=NULL,
                     weights=NULL,
                     fixed=NULL,random=NULL,residual=NULL,
                     delf=TRUE,foldN=NULL,selfing=NULL,
-                    trace=TRUE,maxit=30,Fmv=TRUE,
+                    trace=TRUE,maxit=30,
+                    Fmv=TRUE,mu.delete=FALSE,
                     mulT=FALSE,met=FALSE,cycle=FALSE,
                     batch=FALSE, 
                     predict=NULL,vpredict=NULL,
@@ -697,6 +708,13 @@ run.mod <- function(es0.file,softp=NULL,
   #### !!!!! spatial
   lmtxt<-gsub('ar1v','ar1',lmtxt) 
   lmtxt<-gsub('idv','id',lmtxt)
+
+
+  #### !!!!! delete mu or Trait
+  if(mu.delete==TRUE) {
+      if(mulT==TRUE) lmtxt<-gsub('~ Trait','~ ',lmtxt)
+      if(mulT==FALSE) lmtxt<-gsub('~ mu',' ~ ',lmtxt)
+  }
   
   # predict
   predtxt<-NULL
@@ -835,7 +853,7 @@ update <- function(object,trait=NULL,fixed=NULL,
                    predict=NULL,vpredict=NULL,
                    qualifier=NULL,jobqualf=NULL,
                    trace=NULL,maxit=30,
-                   selfing=NULL,
+                   selfing=NULL,mu.delete=FALSE,
                    mulT=NULL,met=NULL,
                    batch=NULL,mulN=NULL, 
                    batch.G=NULL,batch.R=NULL,
@@ -851,7 +869,7 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
                      predict=NULL,vpredict=NULL,
                      qualifier=NULL,jobqualf=NULL,
                      trace=NULL,maxit=30,
-                     selfing=NULL,
+                     selfing=NULL,mu.delete=NULL,
                      mulN=NULL,mulT=NULL,met=NULL,
                      batch=NULL, 
                      batch.G=NULL,batch.R=NULL,
@@ -870,8 +888,9 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
   if(is.null(vpredict))  vpredict<-org.par$vpredict
   if(is.null(qualifier)) qualifier<-org.par$qualifier
   if(is.null(jobqualf))  jobqualf<-org.par$jobqualf
-  if(is.null(selfing))  selfing<-org.par$selfing
-  
+  if(is.null(selfing))   selfing<-org.par$selfing
+  if(is.null(mu.delete))  mu.delete<-org.par$mu.delete
+
   if(is.null(delf))    delf<-org.par$delf
   if(is.null(trace))   trace<-org.par$trace
   if(is.null(foldN))   foldN<-org.par$foldN
@@ -893,6 +912,7 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
               predict=predict,vpredict=vpredict,
               qualifier=qualifier,jobqualf=jobqualf,
               trace=trace,maxit=maxit,selfing=selfing,
+              mu.delete=mu.delete,
               batch=batch,mulN=mulN,
               batch.G=batch.G,batch.R=batch.R,
               delf=delf,foldN=foldN)
