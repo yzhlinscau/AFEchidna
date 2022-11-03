@@ -2886,50 +2886,75 @@ Var.AR<-function(object,delN=4){
 }
 
 
+#' @title Summarize an esR object
+#' 
+#' @description
+#' A \code{summary} method for objects inheriting from class
+#' \code{esR}.
+#' 
+#' @param object
+#'
+#' An \code{esR} object. 
+#' 
+#' @return
+#'
+#' A list of class \code{summary.esR} with the following components:
+#'
+#' \describe{
+#'
+#' \item{org.res}{Original results from .esr file in Echidna.} 
+#'   
+#' \item{varcomp}{A dataframe summarising the random variance component.}
+#' 
+#' \item{IC}{nedf, loglik, Akaike information criterion and Bayesian information criterion.}
+#' 
+#' \item{coef.fixed}{A dataframe of coefficients and their standard errors
+#' for fixed effects.}
+#'
+#' \item{coef.random}{A dataframe of coefficients and their standard errors
+#' for random effects.}
+#' 
+#' }
 #' @export
 summary <- function(object,...){
    UseMethod("summary",object)
  }
-#' @method  summary esR
+#' 
+#' 
 #' @export  summary.esR
-#' @rdname  AF.Echidna
+# @rdname  AF.Echidna
+#' @method  summary esR
+#' @aliases summary
 #' @export
 #'
-summary.esR<-function(object){
-  #object<-res
+summary.esR <- function(object){
   
-  if(object$org.par$batch==FALSE){
-    if(is.null(object$esr.all)){
-      keyres<-object$keyres
-      cat(keyres)
-      
-      invisible(list(waldT=object$waldT)) #vc=object$components1,
-    }else{
-      nn<-length(object$esr.all)
-      trt<-unlist(lapply(object$esr.all,function(x) x$Traits))
+  sum.object <- vector(mode="list")
+  if(object$org.par$batch0==FALSE & is.null(object$esr.all)){
+      keyres <- object$keyres
+      sum.object$org.res <- keyres  # cat(keyres)
+      sum.object$varcomp <- AFEchidna::Var(object)
+      sum.object$IC <- AFEchidna::IC(object)
+      sum.object$coef.fixed  <- AFEchidna::coef(object)$fixed
+      sum.object$coef.random <- AFEchidna::coef(object)$random
+    }else{  
+      if(!is.null(object$esr.all)) xxxx <- object$esr.all ## !cycle
+      if(!is.null(object$res.all)) xxxx <- object$res.all ## batch
+      nn <- length(xxxx) #length(object$esr.all)
+      trt <- unlist(lapply(xxxx,function(x) x$Traits))
+     
       for(i in 1:nn){
-        cat('\nSummary results for trait: ',trt[i],'\n')
-        cat('\n',object$esr.all[[i]]$keyres,'\n')
-        cat('\n')
+        sum.object$org.res[[i]] <- xxxx[[i]]$keyres #object$esr.all[[i]]$keyres
+        sum.object$coef.fixed[[i]]  <- AFEchidna::coef(object)[[i]]$fixed
+        sum.object$coef.random[[i]] <- AFEchidna::coef(object)[[i]]$random
       }
+      names(sum.object$coef.fixed) <-names(AFEchidna::coef(object))
+      names(sum.object$coef.random)<-names(AFEchidna::coef(object))
+      sum.object$IC <- AFEchidna::IC(object)
     }
-  }
-  
-  if(object$org.par$batch==TRUE){
-    trt<-unlist(lapply(object$res.all,function(x) x$Traits))
-    
-    trt<-gsub(' ','-',trt)
-    trt<-sub('-$','',trt)
-    
-    #preds$pred<-lapply(object$res.all,function(x) x$pred)
-    for(i in 1:length(trt)) {
-      #preds[[i]]<-object$res.all[[i]]$Iterations
-      cat('\nSummary results for trait: ',trt[i],'\n')
-      cat('\n',object$res.all[[i]]$keyres,'\n')
-      cat('\n')
-    }
-  }
-  
+
+  class(sum.object) <- "summary.esR"
+  return(sum.object)
 }
 
 #' @export
