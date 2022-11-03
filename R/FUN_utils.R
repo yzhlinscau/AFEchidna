@@ -21,7 +21,7 @@
          
          pos=match("package:AFEchidna", search()))
   
-  AFEchidna.version = "1.54 (2021-09-07)" # usually 2 months before it expires
+  AFEchidna.version = "1.68 (2022-11-03)" # usually 2 months before it expires
   
   
   
