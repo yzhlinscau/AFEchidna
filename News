@@ -3,6 +3,7 @@ AFEchidna V1.62
 * Echidna version V 1.62;
 * Update waldT() function;
 * Update loadsoft() function;
+* Update summary() function; # 2022-08-18
 ......
 
 
@@ -12,3 +13,85 @@ AFEchidna V1.54
 * Add purrr package function for batch analysis;
 * Fix problem when using at(Trait,1):Factor in fixed factors;
 ......
+
+
+Echidna V1.68
+===========
+* October 18, 2022; Build 1.68
+* Fixed bug fitting multivariate model when no records have all traits present.
+* Added !AISING qualifier to better manage singularities in the AI matrix.
+
+
+Echidna V1.67
+===========
+* October 10, 2022; Build 1.67
+* Fixed bug limiting pedigree to 400000 individuals
+* Add !SGIV qualifier to PEDIGREE file line
+
+Echidna V1.66
+===========
+* September 29, 2022; Build 1.66
+* Fixed serious bug calculating the Residual Score in multivariate models when missing value pattern differs among traits.
+* Fixed issue of some jobs failing with Factor !I factor type
+* Fixed issue parsing at(Tr,2).( A -B)
+* Added new sparse binary .sgiv input option
+
+Echidna V1.65
+===========
+* August 25, 2022; Build 1.65
+* Fixed issue with Factor !A !L names.txt
+* Fixed issues with .xml files
+
+
+Echidna V1.64
+===========
+* August 3, 2022; Build 1.64
+* Refined plot of RvE for binary data
+* Added !HINV qualifier to merge a Genomic relationship matrix with a Numerator relationship matrix to form Hinverse.
+* Various bug fixes
+
+Echidna V1.63
+===========
+* Echidna 1.63, 30 June 2022
+* More components allowed in VPREDICT
+* Fixed bug (crash( reporting long integer class names in PREDICT
+* Added ANTE variance structure . ante1(access) as R and G
+* Some changes to STEPSZ and SLOW tuning have slightly modified some convergence sequences. Added ar1h(access) as R and G
+* Fixed ante1(access $VarG) where VarG string is > 100 characters.
+* Fixed issue with residual id(1300).us(Acc) with !ASUV sorted data
+* Fixed residual units.us(Trait 5467 52.6 474 0 0 5173 !GPPPZZP)
+
+Echidna V1.62
+===========
+* March 22 2022; Build 1.62
+* Added PREDICT … !CONTRAST coeffs to facilitate testing treatment contrasts
+* Small Speed up of SCORE calculation in bivariate analysis
+* Fixed bug reporting solutions in 1.61
+
+
+Echidna V1.61
+===========
+* March 8 2022; Build 1.61
+* Fixed bug parsing a long (>200characters) !ASSIGN list
+* Fixed bug associated with settng specific variances to zero.
+* Added !NCZ qualifier to !MBF as alternative to setting columns in function 2nd argument.
+
+
+Echidna V1.60
+===========
+* March 4 2022; Build 1.60
+* Fix recent (1.59) bug in processing with !GDENSE qualifier.
+* Fix recent (1.58) bug reporting labels of class levels in .ess/.etb files
+
+
+Echidna V1.57
+===========
+* December 8 2021; Build 1.57
+* Fix intermittent bug reporting class names of PEDIGREE factor.
+* Fix addressing errors with large workspace.
+
+
+Echidna V1.56
+===========
+* October 4 2021; Update 1.56
+* Extended PREDICT … !TDIFF to report critical values when using residual idv(units).
