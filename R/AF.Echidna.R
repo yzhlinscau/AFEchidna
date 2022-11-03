@@ -315,10 +315,12 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       
       if(batch==FALSE){ # AFEchidna::  ###  batch.Y, batch.G, batch.R
         ttN <- 1
+        batch0 <- FALSE
       } else{ 
         # batch
         require(dplyr,warn.conflicts=FALSE,quietly=TRUE)
         require(tidyr,warn.conflicts=FALSE,quietly=TRUE) # unite
+        batch0 <- TRUE
         
         cat('\nProgram starts running batch analysis ------ \n')
         
@@ -405,6 +407,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
                     Fmv=Fmv,cycle=cycle,batch=batch,
+                    batch0=batch0,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
                     predict=predict,vpredict=vpredict,
@@ -413,6 +416,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
     
     # for 2 more G-structures
     if (as.numeric(mode)==2) {
+      batch0 <- TRUE
       
       cat('\nProgram runs for 2 more G-structure at one time. ------ \n')
       
@@ -450,6 +454,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                              trace=trace,delf=delf,foldN=foldN,
                              predict=predict,vpredict=vpredict,
                              maxit=maxit,cycle=cycle,Fmv=Fmv,
+                             #batch0=batch0,
                              qualifier=qualifier,jobqualf=jobqualf)
       
       }
@@ -470,7 +475,9 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     fixed=fixed,random=random,residual=residual,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
-                    batch=TRUE,cycle=cycle,Fmv=Fmv,
+                    #batch=TRUE,
+                    batch0=batch0,batch=batch,
+                    cycle=cycle,Fmv=Fmv,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
                     predict=predict,vpredict=vpredict,
@@ -480,6 +487,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
     
     # for 2 more R-strucutre
     if (as.numeric(mode)==3) {
+      batch0 <- TRUE
       cat('\nProgram runs for 2 more R-structure at one time. ------ \n')
       
       residual1 <- lapply(residual, as.character)
@@ -528,7 +536,9 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     fixed=fixed,random=random,residual=residual,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
-                    Fmv=Fmv,cycle=cycle,batch=TRUE,
+                    Fmv=Fmv,cycle=cycle,
+                    #batch=TRUE,
+                    batch0=batch0,batch=batch,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
                     predict=predict,vpredict=vpredict,
@@ -542,7 +552,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
     return(tt)
   }
   
-  if(batch.G==FALSE & batch.R==FALSE)  tt <- test(mode="batch.Y")
+  if(batch==FALSE & batch.G==FALSE & batch.R==FALSE)  tt <- test(mode="batch.Y")
   if(batch.G==TRUE  & batch.R==FALSE)  tt <- test(mode="batch.G")
   if(batch.R==TRUE  & batch.G==FALSE)  tt <- test(mode="batch.R")
       
