@@ -19,7 +19,8 @@
 #' @param mulp	  multi-pin formula to run at one time, NULL(default). 
 #' @param cycle	  Echidna result from qualifier cycle,FALSE(default).
 #' @param trait	   aim trait for analysis, such as, 'h3', 'h3 h4',~h3+h4, etc, NULL(default).
-#' @param family  such as esr_binomial(), esr_poisson().	     
+#' @param family  such as esr_binomial(), esr_poisson().
+#' @param selfing  the probability of selfing for parent, such as 0.1.
 #' @param weights   A variable used as weights in the fit.
 #' @param fixed      fixed effects, such as, c('Rep'), c('Site', 'Site.Rep') or 'Site Site.Rep', h3~1+Rep, etc.	
 #' @param random	   random effects, such as,'Mum','Mum Mum.Rep',~Mum+Mum:Rep, etc. 
