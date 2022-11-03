@@ -219,6 +219,7 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
     if(!is.null(pedS)) {
       tempf[4+pedS]<-sub(' !I #',' !P #',tempf[4+pedS])
       tempf <- append(tempf,tempf[dat.fl])
+      tempf[length(tempf)-1] <- paste0(tempf[length(tempf)-1], ' !PARTIALSELF 0')
     }
       
     
@@ -256,7 +257,7 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
 #'                    mulT,met,cycle,
 #'                    batch,mulN,mulp,
 #'                    batch.G,batch.R,
-#'                    run.purrr,
+#'                    run.purrr,selfing,
 #'                    predict,vpredict,
 #'                    qualifier,jobqualf) 
 #' @export
@@ -269,7 +270,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                   mulT=FALSE,met=FALSE,cycle=FALSE,
                   batch=FALSE,mulN=NULL,mulp=NULL, 
                   batch.G=FALSE,batch.R=FALSE,
-                  run.purrr=FALSE,
+                  run.purrr=FALSE,selfing=NULL,
                   predict=NULL,vpredict=NULL,
                   qualifier=NULL,jobqualf=NULL){
   
@@ -357,7 +358,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                            trait=x,family=family,#trait.mod=trait.mod,
                            weights=weights,
                            fixed=fixed,random=random,residual=residual,
-                           mulT=mulT,met=met,
+                           mulT=mulT,met=met,selfing=selfing,
                            trace=trace,delf=delf,foldN=foldN,
                            predict=predict,vpredict=vpredict,
                            maxit=maxit,cycle=cycle,Fmv=Fmv,
@@ -398,7 +399,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       
       org.par <- list(es0.file=es0.file,softp=softp,
                     trait=trait,family=family,#trait.mod=trait.mod,
-                    weights=weights,
+                    weights=weights,selfing=selfing,
                     fixed=fixed,random=random,residual=residual,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
@@ -436,7 +437,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
         if(!is.na(ran1[x]))
           AFEchidna::run.mod(es0.file=es0.file,softp=softp,
                   fixed=fixed,random=ran1[x],residual=residual,
-                  mulT=mulT,met=met,
+                  mulT=mulT,met=met,selfing=selfing,
                   trace=trace,delf=delf,foldN=foldN,
                   predict=predict,vpredict=vpredict,
                   maxit=maxit,cycle=cycle,Fmv=Fmv,
@@ -444,7 +445,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
         else
           AFEchidna::run.mod(es0.file=es0.file,softp=softp,#trait=x,
                              fixed=fixed,random=NULL,residual=residual,
-                             mulT=mulT,met=met,
+                             mulT=mulT,met=met,selfing=selfing,
                              trace=trace,delf=delf,foldN=foldN,
                              predict=predict,vpredict=vpredict,
                              maxit=maxit,cycle=cycle,Fmv=Fmv,
@@ -464,7 +465,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       
       org.par <- list(es0.file=es0.file,softp=softp,
                     trait=trait,family=family,#trait.mod=trait.mod,
-                    weights=weights,
+                    weights=weights,selfing=selfing,
                     fixed=fixed,random=random,residual=residual,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
@@ -502,7 +503,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
 
         AFEchidna::run.mod(es0.file=es0.file,softp=softp,
                            fixed=fixed,random=random,residual=resid1[x],
-                           mulT=mulT,met=met,
+                           mulT=mulT,met=met,selfing=selfing,
                            trace=trace,delf=delf,foldN=foldN,
                            predict=predict,vpredict=vpredict,
                            maxit=maxit,cycle=cycle,Fmv=Fmv,
@@ -522,7 +523,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       
       org.par <- list(es0.file=es0.file,softp=softp,
                     trait=trait,family=family,#trait.mod=trait.mod,
-                    weights=weights,
+                    weights=weights,selfing=selfing,
                     fixed=fixed,random=random,residual=residual,
                     mulT=mulT,mulN=mulN,mulp=mulp,
                     met=met,trace=trace,delf=delf,
@@ -555,7 +556,7 @@ run.mod <- function(es0.file,softp=NULL,
                     trait=NULL,family=NULL,#trait.mod=NULL,
                     weights=NULL,
                     fixed=NULL,random=NULL,residual=NULL,
-                    delf=TRUE,foldN=NULL,
+                    delf=TRUE,foldN=NULL,selfing=NULL,
                     trace=TRUE,maxit=30,Fmv=TRUE,
                     mulT=FALSE,met=FALSE,cycle=FALSE,
                     batch=FALSE, 
@@ -709,6 +710,17 @@ run.mod <- function(es0.file,softp=NULL,
   estxt<-c(qualF,estxt,lmtxt,predtxt)#,vptxt)
   estxt0<-gsub(':','.',estxt)
   estxt<-c(estxt0,vptxt)
+                   
+  if(!is.null(selfing)) {
+    #es0.file='pine_provenance.es0'
+    tempf <- base::readLines(es0.file)
+    #selfing=0.5
+    selfq<-paste0('!PARTIALSELF ',selfing)
+    tempf<-gsub('!PARTIALSELF 0',selfq,tempf)
+    utils::write.table(tempf,file='temp.es',quote=FALSE,
+                       row.names=FALSE,col.names=FALSE,append=FALSE)
+  }else file.copy(es0.file,'temp.es',overwrite=TRUE)                 
+                   
   utils::write.table(estxt,file='temp.es',quote=FALSE,
               row.names=FALSE,col.names=FALSE,append=TRUE)
   
