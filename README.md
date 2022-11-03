@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/115507374.svg)](https://zenodo.org/badge/latestdoi/115507374) <img src="https://img.shields.io/badge/license-GPL3.0-blue.svg" /> <img src="https://img-blog.csdnimg.cn/f2f5ec98035d488a863ee00003b93689.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAeXpobGluc2NhdQ==,size_1,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="logo-blupADC"  height="250" align="right"/>  
 
-version: v1.62       
+version: v1.68       
 update: 03th-11-2022
 
 # AFEchidna
@@ -38,7 +38,13 @@ Note: The source codes of AFEchidna package are programmed under windows operati
 
 ### Installation
 ``` r
+# from github
 remotes::install_github('yzhlinscau/AFEchidna')
+
+# from gitee
+# install.packages('git2r')
+remotes::install_git("https://gitee.com/yzhlinscau/AFEchidna.git")
+
 
 AFEchidna::checkPack()  # check depended R packages
 ``` 
