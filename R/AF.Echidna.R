@@ -835,6 +835,7 @@ update <- function(object,trait=NULL,fixed=NULL,
                    predict=NULL,vpredict=NULL,
                    qualifier=NULL,jobqualf=NULL,
                    trace=NULL,maxit=30,
+                   selfing=NULL,
                    mulT=NULL,met=NULL,
                    batch=NULL,mulN=NULL, 
                    batch.G=NULL,batch.R=NULL,
@@ -850,6 +851,7 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
                      predict=NULL,vpredict=NULL,
                      qualifier=NULL,jobqualf=NULL,
                      trace=NULL,maxit=30,
+                     selfing=NULL,
                      mulN=NULL,mulT=NULL,met=NULL,
                      batch=NULL, 
                      batch.G=NULL,batch.R=NULL,
@@ -868,6 +870,7 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
   if(is.null(vpredict))  vpredict<-org.par$vpredict
   if(is.null(qualifier)) qualifier<-org.par$qualifier
   if(is.null(jobqualf))  jobqualf<-org.par$jobqualf
+  if(is.null(selfing))  selfing<-org.par$selfing
   
   if(is.null(delf))    delf<-org.par$delf
   if(is.null(trace))   trace<-org.par$trace
@@ -889,7 +892,7 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
               mulT=mulT,met=met,cycle=cycle,
               predict=predict,vpredict=vpredict,
               qualifier=qualifier,jobqualf=jobqualf,
-              trace=trace,maxit=maxit,
+              trace=trace,maxit=maxit,selfing=selfing,
               batch=batch,mulN=mulN,
               batch.G=batch.G,batch.R=batch.R,
               delf=delf,foldN=foldN)
