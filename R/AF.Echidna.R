@@ -2681,7 +2681,7 @@ IC.esR <-function(object){
     row.names(df)<-trt
     #print(df)
   }
-  print(df)
+  return(df)
 }
 
 get.IC<-function(object){
