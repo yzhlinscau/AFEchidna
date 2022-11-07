@@ -12,7 +12,7 @@
 #  @param update  update for Echidna software.
 #' @param trace	  show iteration procedure,FALSE(default). 
 #' @param maxit   maximum number of iterations, 30(default).
-#' @param Fmv     make missing values into fixed terms, TRUE(default).
+#' @param Fmv     make missing values into fixed terms, FALSE(default).
 #' @param mu.delete     delete term mu or Trait from model, FALSE(default).
 #' @param mulT	  multi-trait model,FALSE(default).
 #' @param met	    multi-environment trial model,FALSE(default).
@@ -270,7 +270,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                   es0.file,softp=NULL,
                   delf=TRUE,foldN=NULL,
                   trace=TRUE,maxit=30,
-                  Fmv=TRUE,mu.delete=FALSE,
+                  Fmv=FALSE,mu.delete=FALSE,
                   mulT=FALSE,met=FALSE,cycle=FALSE,
                   batch=FALSE,mulN=NULL,mulp=NULL, 
                   batch.G=FALSE,batch.R=FALSE,
