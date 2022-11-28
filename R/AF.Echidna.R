@@ -1056,8 +1056,26 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
        coef<-base::readLines(essf)
        skipn<-grep('at\\(',coef)
        
-       if(length(skipn)!=0) tt$coef <- utils::read.csv(file=essf,header=TRUE,skip=skipn)
-         else tt$coef <- utils::read.csv(file=essf,header=TRUE)
+       ## new here
+       if(length(skipn)!=0) 
+        df <- readr::read_lines(file=essf,skip=skipn)
+       else df <- readr::read_lines(file=essf)
+       
+       dfL<-vector('list',length(df))
+       
+       for(i in 1:length(df))
+         dfL[[i]]<-strsplit(df[i],'\\,\\s+')[[1]]
+       
+       df0<-do.call('rbind',dfL)
+       df1<-as.data.frame(df0[-1,])
+       names(df1)<-df0[1,]
+       
+       tt$coef <- df1
+       rm(df,df0,df1,dfL)
+       ## new here
+       
+     #  if(length(skipn)!=0) tt$coef <- utils::read.csv(file=essf,header=TRUE,skip=skipn)
+     #    else tt$coef <- utils::read.csv(file=essf,header=TRUE)
      }
   }
 
