@@ -1,3 +1,9 @@
+AFEchidna V1.68
+===========
+* Echidna version V 1.68;
+* Fix some bug for coef() function; # 2022-11-28
+......
+
 AFEchidna V1.62
 ===========
 * Echidna version V 1.62;
@@ -14,6 +20,18 @@ AFEchidna V1.54
 * Fix problem when using at(Trait,1):Factor in fixed factors;
 ......
 
+
+Echidna V1.70
+===========
+* November 18 2022 Build 1.70
+* Fixed bug in R script generated with !RML qualifier.
+* Use harveyESS=read.csv(“harvey.ess”,header=T,strip.white=T) to read in the .ess file.
+
+Echidna V1.69
+===========
+* November 9, 2022; Build 1.69
+* HANDLE SOME LARGE PREDICTS BETTER.
+* Various bug fixes.
 
 Echidna V1.68
 ===========
