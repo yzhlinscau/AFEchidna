@@ -1,6 +1,6 @@
 ## version: public
 
-# update: 2022-11-03
+# update: 2022-11-28
 #' @title Summary of added functions for Echidna
 #' 
 #' @param dat.file	 data file to generate .es file.
