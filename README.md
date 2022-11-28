@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/115507374.svg)](https://zenodo.org/badge/latestdoi/115507374) <img src="https://img.shields.io/badge/license-GPL3.0-blue.svg" /> <img src="https://img-blog.csdnimg.cn/f2f5ec98035d488a863ee00003b93689.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAeXpobGluc2NhdQ==,size_1,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="logo-blupADC"  height="250" align="right"/>  
 
 version: v1.68       
-update: 03th-11-2022
+update: 28th-11-2022
 
 # AFEchidna
 Added functions for Echidna in R        
@@ -34,7 +34,7 @@ Note: The source codes of AFEchidna package are programmed under windows operati
 ### Introduction
 
  This package AFEchidna adds some R functions for Echidna v-1.68. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use. Echidna is targeted for use in animal and plant breeding contexts by Arthur Gilmour. The primary software of Echidna could be downloaded from website (https://www.echidnamms.org/). Echidna is free and a powerful tool for mixed models. AFEchidna is developed to run Echidna in R and similar to asreml at some extent.           
-  The latest version of Echidna is V-1.68 (https://www.echidnamms.org/downloads/). Updated: 2022-Oct-18th.
+  The latest version of Echidna is V-1.70 (https://www.echidnamms.org/downloads/). Updated: 2022-Nov-9th.
 
 ### Installation
 ``` r
