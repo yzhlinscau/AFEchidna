@@ -670,8 +670,8 @@ run.mod <- function(es0.file,softp=NULL,
     lmtxt<-gsub('~ mu',paste0(' !WT ',weights,' ~ mu '),lmtxt)
 
   ## family
-  if(!is.null(family))
-   lmtxt<-gsub('~ mu',paste0(' ',family,' ~ mu '),lmtxt)
+  # if(!is.null(family))
+  #  lmtxt<-gsub('~ mu',paste0(' ',family,' ~ mu '),lmtxt)
   
   
   if(class(random)=="formula"){
@@ -774,7 +774,8 @@ run.mod <- function(es0.file,softp=NULL,
   if(trace==TRUE) {
     if(cycle==FALSE){
       cat('\n',df$StartTime,'\n')
-      print.data.frame(df$Iterations)
+      if(!is.null(family)) cat(df$Iterations00,'\n')
+       else print.data.frame(df$Iterations)
       cat(df$FinishAt,'\n\n')
     }
     if(cycle==TRUE){
