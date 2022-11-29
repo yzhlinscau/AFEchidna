@@ -702,7 +702,7 @@ run.mod <- function(es0.file,softp=NULL,
   
   
   if(is.null(residual)) {# resid
-    lmtxt[3]<-'residual units'
+    lmtxt[3]<- ' '  #  'residual units'
   }  else lmtxt[3]<-paste0('residual ',residual)
   
   #### !!!!! spatial
