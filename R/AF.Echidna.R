@@ -3661,6 +3661,8 @@ GenomicRel <- function(marker,option=NULL,ped=NULL,Infv=10000,
   
   if(!require(GeneticsPed)){stop('Need package: GeneticsPed.\n')}
   
+  require(GeneticsPed,warn.conflicts=FALSE,quietly=TRUE)
+  
   cat('Generating G matrix is under going.\n')
   
   options(warn=-1)
