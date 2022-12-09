@@ -592,7 +592,7 @@ run.mod <- function(es0.file,softp=NULL,
   flst <- dir()
 
   if(is.null(es0.file)) stop('Needs an .es0 file.\n')
-  if(met==TRUE) mulT <- TRUE
+  # if(met==TRUE) mulT <- TRUE
   
   flst0 <- flst
   
@@ -662,7 +662,7 @@ run.mod <- function(es0.file,softp=NULL,
     } else lmtxt[1]<-paste0(paste(trait,paste(fixed,collapse = " "),sep=' ~ Trait '),' ,')
   }
   
-  if(met==TRUE) lmtxt<-gsub('Trait',' mu ',lmtxt)
+  # if(met==TRUE) lmtxt<-gsub('Trait',' mu ',lmtxt)
   lmtxt<-gsub('~ mu 1','~ mu ',lmtxt)
   
   ## weights
@@ -774,7 +774,7 @@ run.mod <- function(es0.file,softp=NULL,
   if(trace==TRUE) {
     if(cycle==FALSE){
       cat('\n',df$StartTime,'\n')
-      if(!is.null(family)) cat(df$Iterations00,'\n')
+      if(!is.null(family)|met==TRUE) cat(df$Iterations00,'\n')
        else print.data.frame(df$Iterations)
       cat(df$FinishAt,'\n\n')
     }
@@ -856,6 +856,7 @@ update <- function(object,trait=NULL,fixed=NULL,
                    trace=NULL,maxit=30,
                    selfing=NULL,mu.delete=FALSE,
                    mulT=NULL,met=NULL,
+                   cycle=NULL,softp=NULL,
                    batch=NULL,mulN=NULL, 
                    batch.G=NULL,batch.R=NULL,
                    delf=NULL,foldN=NULL,...){
@@ -900,10 +901,10 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
   if(is.null(batch.G)) batch.G<-org.par$batch.G
   if(is.null(batch.R)) batch.R<-org.par$batch.R
   
-  mulT<-org.par$mulT
-  met<-org.par$met
-  cycle<-org.par$cycle
-  softp<-org.par$softp
+  if(is.null(mulT))     mulT<-org.par$mulT
+  if(is.null(met))      met<-org.par$met
+  if(is.null(cycle))    cycle<-org.par$cycle
+  if(is.null(softp))    softp<-org.par$softp
   
   AFEchidna::echidna(es0.file=es0.file,
                      softp=softp,
