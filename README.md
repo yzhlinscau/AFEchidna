@@ -361,6 +361,31 @@ pm3<-echidna(fixed = cbind(weanwt,weight)~Trait:(year+sex+weanage+pen),
 
 ```
 
+#### 8.12 SS-GBLUP
+
+``` r
+library(AFfR)
+
+data("ugped")
+data("gped")
+data("gmarker")
+
+# get A-matrix, G-matrix and H-matrix
+AGH1<-AFEchidna::AGH.inv(option=1,ugped,gped,gmarker)
+mN<-paste0(c('A','G','H'),'.giv',sep='')
+for(i in 1:3) write.csv(AGH1[[i]],file=mN[[i]],row.names=F)
+
+
+ablup <- echidna(fixed=yield~1+Rep, 
+              random=~ nrm(Genotype),
+              residual=~ units ,
+              es0.file='MET1.es0')
+
+gblup <- update(ablup,random=~giv1(Genotype))  # G.giv  
+hblup <- update(ablup,random=~giv2(Genotype))  # H.giv
+
+```
+
 More examples will be updated in the future....
 
 ### Citation
