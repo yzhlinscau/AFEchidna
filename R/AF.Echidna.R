@@ -3918,31 +3918,19 @@ GenomicRel <- function(marker,option=NULL,ped=NULL,Infv=10000,
 #' @export .AGH.inv
 #' @export
 
-AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3){
+AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3,tidn=NULL,gidn=NULL){
   
-  return(.AGH.inv(option,ugped,gped,gmarker,asrV))
+  return(.AGH.inv(option,ugped,gped,gmarker,asrV,tidn,gidn))
 }
 
-.AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3){ # ,asrV=3
+.AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3,
+                     tidn=NULL,gidn=NULL){
+  # tidn: vector of total id number
+  # gidn: vector of genotyped id number
+  
   # names(ped)<- c("id","father","mother")
   #asrV<-getASRemlVersionLoaded(Rsver=TRUE)
   
-  # pkgs<-c('nadiv','synbreed','GeneticsPed')
-  # cat('AGH.inv function need packages: ',pkgs,'.\n')
-  # 
-  # # from CRAN
-  # for( i in 1:(length(pkgs)-1) ){
-  #   if (!pkgs[i] %in% installed.packages()) { 
-  #     print(paste("installing ",pkgs[i])) 
-  #     install.packages(pkgs[i],dependencies=TRUE) 
-  #   } 
-  # }
-  # # from bioconductor
-  # if(!require(GeneticsPed)){
-  #   source("https://bioconductor.org/biocLite.R")
-  #   cat("installing GeneticsPed\n") 
-  #   BiocInstaller::biocLite('GeneticsPed')
-  # }
   
   if(!require(nadiv)){stop('Need package: nadiv.\n')}
   #if(!require(synbreed)){stop('Need package: synbreed.\n')}
@@ -3957,44 +3945,56 @@ AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3){
   #row.names(tped)<-tped[,1]
   tped<-tped[!duplicated(tped),]
   
-  row.names(tped)<-tped[,1]
-  tid<-row.names(tped)
+  #tped1<-tped
+  tped1<-nadiv::prepPed(tped)
+  fullA<-as.matrix(nadiv::makeA(tped1))
+  tid1<-rownames(fullA)#<-colnames(fullA)
   
-  ugid<-base::setdiff(tid,gid)
+  ugid<-base::setdiff(tid1,gid)
   tid1<-c(ugid,gid)
   
-  tped1<-tped[tid1,]
+  rowName<-as.numeric(rownames(fullA))
+  fullA<-fullA[match(tid1,rowName),match(tid1,rowName)]
   
   gNO<-length(gid)
   ugNO<-length(ugid)
-  
-  tped1<-nadiv::prepPed(tped1)
-  fullA<-as.matrix(nadiv::makeA(tped1))
-  row.names(fullA)<-colnames(fullA)<-tid1
-  
-  # names(tped1)<- c("id","father","mother")
-  # tped1<-GeneticsPed::as.Pedigree(tped1)
-  # fullA<-GeneticsPed::relationshipAdditive(tped1)
-  # rowName<-as.numeric(rownames(fullA))
-  # fullA<-fullA[match(tped[,1],rowName),match(tped[,1],rowName)]
   
   A11<-fullA[1:ugNO,1:ugNO] # ungenotyped A
   A22<-fullA[(1+ugNO):(ugNO+gNO),(1+ugNO):(ugNO+gNO)] # genotyped A
   A12<-fullA[1:ugNO,(1+ugNO):(ugNO+gNO)]
   A21<-t(A12)
+  #row.names(A22)
   
   G<-AFEchidna::GenomicRel( gmarker, option, Gres=TRUE)
   #G<-AFEchidna::GenomicRel( gmarker, option,gped,G.adj=T, Gres=TRUE)
+  #row.names(G)<-colnames(G)<-gid
   
   H11<-A11 + A12 %*% solve(A22) %*% (G-A22) %*% solve(A22) %*% A21
   H12<-G %*% solve(A22) %*% A21
   H21<-t(H12)
   H22<-G
+  #row.names(H11)
   
   H1<-rbind(H11,H12)
   H2<-rbind(H21,H22)
   
   H<-cbind(H1,H2)
+  #row.names(H)
+  
+  if(!is.null(tidn)){
+    class(fullA)<-c("relationshipMatrix", "matrix")
+    rowName<-as.numeric(rownames(fullA))
+    fullA<-fullA[match(tidn,rowName),match(tidn,rowName)]
+    
+    class(H)<-c("relationshipMatrix", "matrix")
+    rowName<-as.numeric(rownames(H))
+    H<-H[match(tidn,rowName),match(tidn,rowName)]
+  }
+  if(!is.null(gidn)){
+    class(G)<-c("relationshipMatrix", "matrix")
+    rowName<-as.numeric(rownames(G))
+    G<-G[match(gidn,rowName),match(gidn,rowName)]
+  }
   
   ## H-inverse
   
