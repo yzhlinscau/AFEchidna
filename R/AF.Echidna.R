@@ -3929,8 +3929,7 @@ AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3,tidn=NULL,gidn=NULL){
   # gidn: vector of genotyped id number
   
   # names(ped)<- c("id","father","mother")
-  #asrV<-getASRemlVersionLoaded(Rsver=TRUE)
-  
+  #asrV<-getASRemlVersionLoaded(Rsver=TRUE)  
   
   if(!require(nadiv)){stop('Need package: nadiv.\n')}
   #if(!require(synbreed)){stop('Need package: synbreed.\n')}
@@ -3953,7 +3952,7 @@ AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3,tidn=NULL,gidn=NULL){
   ugid<-base::setdiff(tid1,gid)
   tid1<-c(ugid,gid)
   
-  rowName<-as.numeric(rownames(fullA))
+  rowName<-rownames(fullA)
   fullA<-fullA[match(tid1,rowName),match(tid1,rowName)]
   
   gNO<-length(gid)
@@ -3967,19 +3966,16 @@ AGH.inv <- function(option=1,ugped,gped,gmarker,asrV=3,tidn=NULL,gidn=NULL){
   
   G<-AFEchidna::GenomicRel( gmarker, option, Gres=TRUE)
   #G<-AFEchidna::GenomicRel( gmarker, option,gped,G.adj=T, Gres=TRUE)
-  #row.names(G)<-colnames(G)<-gid
   
   H11<-A11 + A12 %*% solve(A22) %*% (G-A22) %*% solve(A22) %*% A21
   H12<-G %*% solve(A22) %*% A21
   H21<-t(H12)
   H22<-G
-  #row.names(H11)
   
   H1<-rbind(H11,H12)
   H2<-rbind(H21,H22)
   
   H<-cbind(H1,H2)
-  #row.names(H)
   
   if(!is.null(tidn)){
     class(fullA)<-c("relationshipMatrix", "matrix")
