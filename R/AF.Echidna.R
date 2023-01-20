@@ -372,7 +372,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                            qualifier=qualifier,jobqualf=jobqualf)
        } 
         
-      if(run.purrr) ss <- lapply(ttN, run.fun1)
+      if(!run.purrr) ss <- lapply(ttN, run.fun1)
         else ss <- ttN %>% purrr::map( run.fun1 )
       
       #
@@ -466,7 +466,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       
       }
       
-      if(run.purrr) ss <- lapply(1:ttN, run.fun2) 
+      if(!run.purrr) ss <- lapply(1:ttN, run.fun2) 
         else ss <- 1:ttN %>% purrr::map( run.fun2 ) 
       
       names(ss) <- ran0
@@ -529,7 +529,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
 
       }
       
-      if(run.purrr) ss <- lapply(1:ttN, run.fun3 ) 
+      if(!run.purrr) ss <- lapply(1:ttN, run.fun3 ) 
       else ss <- 1:ttN %>% purrr::map(run.fun3 )
       
       names(ss) <- resid0
