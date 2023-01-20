@@ -562,7 +562,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
     return(tt)
   }
   
-  if(batch==FALSE & batch.G==FALSE & batch.R==FALSE)  tt <- test(mode="batch.Y")
+  if(batch.G==FALSE & batch.R==FALSE)  tt <- test(mode="batch.Y")
   if(batch.G==TRUE  & batch.R==FALSE)  tt <- test(mode="batch.G")
   if(batch.R==TRUE  & batch.G==FALSE)  tt <- test(mode="batch.R")
       
