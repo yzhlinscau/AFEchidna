@@ -920,6 +920,42 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
               delf=delf,foldN=foldN)
   
 }
+                         
+######### subset function for MET 
+#' @rdname  AF.Echidna
+#' @usage subF(fixed,random,residual,es0.file,
+#'             subV.org, subV.nL,subV.new,mulN,res.n0)
+#' 
+#' @export
+# case: https://blog.csdn.net/yzhlinscau/article/details/127440289?spm=1001.2014.3001.5501
+#
+subF <- function(fixed=NULL, random=NULL, residual=NULL,es0.file,
+                 subV.org, subV.nL,subV.new,mulN=2,res.n0=NULL) {
+                 
+  cat('Starting analysis.\n')
+  cc<-1:subV.nL
+  bb <- utils::combn(cc,mulN)
+  if(is.null(res.n0)) bbn <- ncol(bb) 
+  else bbn <-res.n0
+  
+  res<-vector("list", bbn)
+  
+  res<-lapply(1:bbn, function(x){
+    #cc<-paste0('Site-',bb[1,x],':',bb[2,x])
+    subsetcc<-paste0('!subset ',subV.new, subV.org,' ',bb[1,x],' ',bb[2,x])
+    mm <- echidna(fixed=fixed,
+                  random=random,
+                  residual=residual,
+                  qualifier = subsetcc,
+                  trace=F,
+                  es0.file = es0.file)
+    })
+  
+  names(res)<- lapply(1:bbn, function(x) paste0('Site-',bb[1,x],':',bb[2,x]))
+  cat('works done.\n')
+  res
+}                                                  
+                         
 
 ## batch results to each-single result
 #' @usage b2s(object)
