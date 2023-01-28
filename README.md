@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/115507374.svg)](https://zenodo.org/badge/latestdoi/115507374) <img src="https://img.shields.io/badge/license-GPL3.0-blue.svg" /> <img src="https://img-blog.csdnimg.cn/f2f5ec98035d488a863ee00003b93689.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAeXpobGluc2NhdQ==,size_1,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="logo-blupADC"  height="250" align="right"/>  
 
 version: v1.68       
-update: 28th-11-2022
+update: 28th-01-2023
 
 # AFEchidna
 Added functions for Echidna in R        
@@ -381,10 +381,35 @@ ablup <- echidna(fixed=yield~1+Rep,
               residual=~ units ,
               es0.file='MET1.es0')
 
-gblup <- update(ablup,random=~giv1(Genotype))  # G.giv  
+#gblup <- update(ablup,random=~giv1(Genotype))  # G.giv  
 hblup <- update(ablup,random=~giv2(Genotype))  # H.giv
 
 ```
+
+
+#### 8.13 SubF function
+
+``` r
+df <- read.csv("mssy.asd")
+siteL<-unique(df$site)
+
+mm2<-echidna(fixed=logsy~site_n,
+            random=~variety+site_n:variety,
+            residual=~units,
+            es0.file="mssy.es0",
+            subF=TRUE,
+            subV.org='site', subV.Lv=siteL,subV.new='site_n',
+            mulN=2,res.no=4)
+            
+mm2 %>% b2s %>% lapply(., Var)
+
+pin.res<- mm2 %>% b2s %>% lapply(., function(x)  pin(x,mulp=c(rb~V2/(V2+V3)),Rres=TRUE))
+pin.res
+
+mm2a <- update(mm2,subF=TRUE,mulN=3)            
+
+```
+
 
 More examples will be updated in the future....
 
