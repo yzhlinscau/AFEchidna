@@ -390,15 +390,12 @@ hblup <- update(ablup,random=~giv2(Genotype))  # H.giv
 #### 8.13 SubF function
 
 ``` r
-df <- read.csv("mssy.asd")
-siteL<-unique(df$site)
-
-mm2<-echidna(fixed=logsy~site_n,
-            random=~variety+site_n:variety,
-            residual=~units,
+mm2<-echidna(fixed=logsy~site,
+            random=~variety+site:variety,
+            residual=~sat(site):units,
             es0.file="mssy.es0",
-            subF=TRUE,
-            subV.org='site', subV.Lv=siteL,subV.new='site_n',
+            subF=TRUE,met=TRUE,
+            subV.org='site', dat.file='mssy.asd',
             mulN=2,res.no=4)
             
 mm2 %>% b2s %>% lapply(., Var)
