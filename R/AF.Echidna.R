@@ -31,8 +31,6 @@
 #' @param batch.R   run more than 2 R structures at one time, FALSE(default). 
 #' @param subF      run subF function for MET data sets,FALSE(default).
 #' @param subV.org  original variable for subF.
-#' @param subV.Lv   original variable level values.
-#' @param subV.new  new variable name for subF variable.
 #' @param res.no    number to show results.
 #' @param foldN	    new folder name to store each run's results, only works when delf is 'FALSE'.
 #' @param delf      delete all Echidna result files from the folder of .es0 file, TRUE(default).	
@@ -270,8 +268,8 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
 #'                    mulT,met,cycle,
 #'                    batch,mulN,mulp,
 #'                    batch.G,batch.R,
-#'                    subF,subV.org,subV.Lv,
-#'                    subV.new,res.no,
+#'                    subF,subV.org,
+#'                    res.no,dat.file,
 #'                    run.purrr,selfing,
 #'                    predict,vpredict,
 #'                    qualifier,jobqualf) 
@@ -286,8 +284,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                   mulT=FALSE,met=FALSE,cycle=FALSE,
                   batch=FALSE,mulN=NULL,mulp=NULL, 
                   batch.G=FALSE,batch.R=FALSE,
-                  subF=FALSE,subV.org=NULL,subV.Lv=NULL,
-                  subV.new=NULL,res.no=NULL,
+                  subF=FALSE,subV.org=NULL,
+                  res.no=NULL,dat.file=NULL,
                   run.purrr=FALSE,selfing=NULL,
                   predict=NULL,vpredict=NULL,
                   qualifier=NULL,jobqualf=NULL){
@@ -429,6 +427,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     batch0=batch0,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
+                    subF=subF,subV.org=subV.org, 
+                    res.no=res.no,dat.file=dat.file,                       
                     predict=predict,vpredict=vpredict,
                     qualifier=qualifier,jobqualf=jobqualf)
     }
@@ -502,6 +502,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     Fmv=Fmv,mu.delete=mu.delete,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
+                    subF=subF,subV.org=subV.org, 
+                    res.no=res.no,dat.file=dat.file,                       
                     predict=predict,vpredict=vpredict,
                     qualifier=qualifier,jobqualf=jobqualf)
  
@@ -565,18 +567,28 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                     batch0=batch0,batch=batch,
                     call=call,run.purrr=run.purrr,
                     batch.G=batch.G,batch.R=batch.R,
+                    subF=subF,subV.org=subV.org, 
+                    res.no=res.no,dat.file=dat.file,                      
                     predict=predict,vpredict=vpredict,
                     qualifier=qualifier,jobqualf=jobqualf)
     }
 
         # subF function
     if (as.numeric(mode)==4) {
-      
       batch0 <- TRUE
       
       cat('Starting analysis.\n')
-      cc<-subV.Lv
-      #cc<-letters[1:6]
+      
+      # data file
+      dat <- read.csv(file=dat.file)
+      
+      # copy original data file and rename to an old.file
+      org.datf <- paste0('old.',dat.file)
+      write.csv(dat,file=org.datf,row.names=FALSE)
+      dat <- read.csv(file=org.datf)
+      
+      dat$nSite <- dat[,subV.org]
+      cc <- unique(dat$nSite)
       
       if(is.null(mulN)) mulN <- 2 
       else mulN <- mulN
@@ -586,14 +598,16 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       else bbn <-res.no
      
       run.fun4 <- function(x){
-        #cc<-paste0('Site-',bb[1,x],':',bb[2,x])
         cat('\nAnalysing---- ',paste(append(paste0('Site-'),bb[,x]), collapse = ":"))
-        subsetcc<-paste(append(paste0('!subset ',subV.new,' ', subV.org),bb[,x]), collapse = " ")
+        
+        dat22 <- dat %>% filter(.,nSite %in% bb[,x])
+        write.csv(dat22,file=dat.file,row.names=FALSE)
+        
         mm <- AFEchidna::run.mod(fixed=fixed,
                       random=random,
                       residual=residual,
-                      qualifier = subsetcc,
-                      trace=trace,
+                      #qualifier = subsetcc,
+                      trace=trace,met=met,
                       es0.file = es0.file)
       }
       
@@ -602,6 +616,10 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       else ss <- 1:bbn %>% purrr::map(run.fun4 )
       
       names(ss)<- lapply(1:bbn, function(x) paste(append(paste0('Site-'),bb[,x]), collapse = ":"))
+      
+      dat$nSite <- NULL
+      write.csv(dat,file=dat.file,row.names=FALSE)
+      file.remove(org.datf)      
       cat('works done.\n')
       
       tt <- NULL
@@ -622,8 +640,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                       Fmv=Fmv,mu.delete=mu.delete,
                       call=call,run.purrr=run.purrr,
                       batch.G=batch.G,batch.R=batch.R,
-                      subF=subF,subV.org=subV.org, subV.Lv=subV.Lv,
-                      subV.new=subV.new,res.no=res.no,
+                      subF=subF,subV.org=subV.org, 
+                      res.no=res.no,dat.file=dat.file,
                       predict=predict,vpredict=vpredict,
                       qualifier=qualifier,jobqualf=jobqualf)
       
@@ -935,8 +953,8 @@ update <- function(object,trait=NULL,fixed=NULL,
                    mulT=NULL,met=NULL,
                    batch=NULL,mulN=NULL, 
                    batch.G=NULL,batch.R=NULL,
-                   subF=FALSE,subV.org=NULL,subV.Lv=NULL,
-                   subV.new=NULL,res.no=NULL,                   
+                   subF=FALSE,subV.org=NULL,
+                   res.no=NULL, dat.file=NULL,                  
                    delf=NULL,foldN=NULL,...){
   UseMethod("update",object)
 }
@@ -954,8 +972,8 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
                      cycle=NULL,softp=NULL,
                      batch=NULL, 
                      batch.G=NULL,batch.R=NULL,
-                     subF=FALSE,subV.org=NULL,subV.Lv=NULL,
-                     subV.new=NULL,res.no=NULL,                     
+                     subF=FALSE,subV.org=NULL,
+                     res.no=NULL,dat.file=NULL,                     
                      delf=NULL,foldN=NULL,...){
   #object<-res21
   org.par<-object$org.par
@@ -984,8 +1002,7 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
 
   if(is.null(subF))     subF<-org.par$subF
   if(is.null(subV.org)) subV.org<-org.par$subV.org
-  if(is.null(subV.Lv))  subV.Lv<-org.par$subV.Lv
-  if(is.null(subV.new)) subV.new<-org.par$subV.new
+  if(is.null(dat.file)) dat.file<-org.par$dat.file
   if(is.null(res.no))   res.no<-org.par$res.no
   
   if(is.null(mulT))     mulT<-org.par$mulT
@@ -994,8 +1011,7 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
   if(is.null(softp))    softp<-org.par$softp
   
   AFEchidna::echidna(es0.file=es0.file,
-                     softp=softp,
-                     trait=trait,
+                     softp=softp,trait=trait,
               fixed=fixed,random=random,residual=residual,
               mulT=mulT,met=met,cycle=cycle,
               predict=predict,vpredict=vpredict,
@@ -1004,47 +1020,12 @@ update.esR<-function(object,trait=NULL,fixed=NULL,
               mu.delete=mu.delete,
               batch=batch,mulN=mulN,
               batch.G=batch.G,batch.R=batch.R,
-              subF=subF,subV.org=subV.org, subV.Lv=subV.Lv,
-              subV.new=subV.new,res.no=res.no,              
+              subF=subF,subV.org=subV.org, 
+              res.no=res.no,dat.file=dat.file,              
               delf=delf,foldN=foldN)
   
 }
-
-######### subset function for MET 
-#' @rdname  AF.Echidna
-#' @usage subF(fixed,random,residual,es0.file,
-#'             subV.org, subV.Lv,subV.new,mulN,res.no)
-#' 
-#' @export
-# case: https://blog.csdn.net/yzhlinscau/article/details/127440289?spm=1001.2014.3001.5501
-#
-subF <- function(fixed=NULL, random=NULL, residual=NULL,es0.file,
-                 subV.org, subV.Lv,subV.new,mulN=2,res.no=NULL) {
-                 
-  cat('Starting analysis.\n')
-  cc <- subV.Lv
-  bb <- utils::combn(cc,mulN)
-  if(is.null(res.no)) bbn <- ncol(bb) 
-  else bbn <- res.no
-  
-  res<-vector("list", bbn)
-  
-  res <- lapply(1:bbn, function(x){
-    #cc<-paste0('Site-',bb[1,x],':',bb[2,x])
-    subsetcc <- paste(append(paste0('!subset ',subV.new,' ', subV.org),bb[,x]), collapse = " ")
-    mm <- echidna(fixed=fixed,
-                  random=random,
-                  residual=residual,
-                  qualifier = subsetcc,
-                  trace=F,
-                  es0.file = es0.file)
-    })
-  
-  names(res) <- lapply(1:bbn, function(x) paste(append(paste0('Site-'),bb[,x]), collapse = ":"))
-  cat('works done.\n')
-  return(res)
-}                                              
-                         
+                                                                     
 
 ## batch results to each-single result
 #' @usage b2s(object)
