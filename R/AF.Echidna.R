@@ -317,9 +317,16 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
         trait <- unlist(lapply(trait1, function(x) x[2]))
         #trait1<-gsub('\\+',' ',trait1)
       } 
-    }
-    
+    }    
   }
+                               
+  # get data file, maybe problem here!!!
+  es0.txt <- base::readLines(es0.file)
+  datL <- es0.txt[grep('\\!SKIP',es0.txt)] # >=1
+  datL <- datL[-grep('\\#',datL)]
+  lth <- length(datL)
+  dat.file0 <- sub('\\s+\\!SKIP.*','',datL[lth])
+  if(is.null(dat.file)) dat.file <- dat.file0 else dat.file <- dat.file                               
   
   test<-function(mode=c("batch.Y", "batch.G", "batch.R", 'subF' )){
     
@@ -384,7 +391,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                            qualifier=qualifier,jobqualf=jobqualf)
        } 
         
-      if(run.purrr) ss <- lapply(ttN, run.fun1)
+      if(!run.purrr) ss <- lapply(ttN, run.fun1)
         else ss <- ttN %>% purrr::map( run.fun1 )
       
       #
@@ -413,24 +420,6 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
         Converge <- sapply(tt$res.all,function(x) x$Converge)
         maxit <- sapply(tt$res.all,function(x) x$maxit)
       }
-      
-      call <- list(fixed=fixed,random=random,residual=residual)
-      
-      org.par <- list(es0.file=es0.file,softp=softp,
-                    trait=trait,family=family,#trait.mod=trait.mod,
-                    weights=weights,selfing=selfing,
-                    fixed=fixed,random=random,residual=residual,
-                    mulT=mulT,mulN=mulN,mulp=mulp,
-                    met=met,trace=trace,delf=delf,
-                    Fmv=Fmv,mu.delete=mu.delete,
-                    cycle=cycle,batch=batch,
-                    batch0=batch0,
-                    call=call,run.purrr=run.purrr,
-                    batch.G=batch.G,batch.R=batch.R,
-                    subF=subF,subV.org=subV.org, 
-                    res.no=res.no,dat.file=dat.file,                       
-                    predict=predict,vpredict=vpredict,
-                    qualifier=qualifier,jobqualf=jobqualf)
     }
     
     # for 2 more G-structures
@@ -480,33 +469,11 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       
       }
       
-      if(run.purrr) ss <- lapply(1:ttN, run.fun2) 
-        else ss <- 1:ttN %>% purrr::map( run.fun2 ) 
-      
-      names(ss) <- ran0
-      
-      tt <- NULL
-      
-      tt$res.all <- ss
-      call <- list(fixed=fixed,random=random,residual=residual)
-      
-      org.par <- list(es0.file=es0.file,softp=softp,
-                    trait=trait,family=family,#trait.mod=trait.mod,
-                    weights=weights,selfing=selfing,
-                    fixed=fixed,random=random,residual=residual,
-                    mulT=mulT,mulN=mulN,mulp=mulp,
-                    met=met,trace=trace,delf=delf,
-                    #batch=TRUE,
-                    batch0=batch0,batch=batch,
-                    cycle=cycle,
-                    Fmv=Fmv,mu.delete=mu.delete,
-                    call=call,run.purrr=run.purrr,
-                    batch.G=batch.G,batch.R=batch.R,
-                    subF=subF,subV.org=subV.org, 
-                    res.no=res.no,dat.file=dat.file,                       
-                    predict=predict,vpredict=vpredict,
-                    qualifier=qualifier,jobqualf=jobqualf)
- 
+      if(!run.purrr) ss <- lapply(1:ttN, run.fun2) 
+        else ss <- 1:ttN %>% purrr::map( run.fun2 )       
+      names(ss) <- ran0     
+      tt <- NULL      
+      tt$res.all <- ss 
     }
     
     # for 2 more R-strucutre
@@ -545,32 +512,12 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
 
       }
       
-      if(run.purrr) ss <- lapply(1:ttN, run.fun3 ) 
+      if(!run.purrr) ss <- lapply(1:ttN, run.fun3 ) 
       else ss <- 1:ttN %>% purrr::map(run.fun3 )
       
-      names(ss) <- resid0
-      
-      tt <- NULL
-      
+      names(ss) <- resid0      
+      tt <- NULL      
       tt$res.all <- ss
-      call <- list(fixed=fixed,random=random,residual=residual)
-      
-      org.par <- list(es0.file=es0.file,softp=softp,
-                    trait=trait,family=family,#trait.mod=trait.mod,
-                    weights=weights,selfing=selfing,
-                    fixed=fixed,random=random,residual=residual,
-                    mulT=mulT,mulN=mulN,mulp=mulp,
-                    met=met,trace=trace,delf=delf,
-                    Fmv=Fmv,mu.delete=mu.delete,
-                    cycle=cycle,
-                    #batch=TRUE,
-                    batch0=batch0,batch=batch,
-                    call=call,run.purrr=run.purrr,
-                    batch.G=batch.G,batch.R=batch.R,
-                    subF=subF,subV.org=subV.org, 
-                    res.no=res.no,dat.file=dat.file,                      
-                    predict=predict,vpredict=vpredict,
-                    qualifier=qualifier,jobqualf=jobqualf)
     }
 
         # subF function
@@ -622,30 +569,27 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       file.remove(org.datf)      
       cat('works done.\n')
       
-      tt <- NULL
-      
-      tt$res.all <- ss
-      
-      call <- list(fixed=fixed,random=random,residual=residual)
-      
-      org.par <- list(es0.file=es0.file,softp=softp,
-                      trait=trait,family=family,#trait.mod=trait.mod,
-                      weights=weights,selfing=selfing,
-                      fixed=fixed,random=random,residual=residual,
-                      mulT=mulT,mulN=mulN,mulp=mulp,
-                      met=met,trace=trace,delf=delf,
-                      #batch=TRUE,
-                      batch0=batch0,batch=batch,
-                      cycle=cycle,
-                      Fmv=Fmv,mu.delete=mu.delete,
-                      call=call,run.purrr=run.purrr,
-                      batch.G=batch.G,batch.R=batch.R,
-                      subF=subF,subV.org=subV.org, 
-                      res.no=res.no,dat.file=dat.file,
-                      predict=predict,vpredict=vpredict,
-                      qualifier=qualifier,jobqualf=jobqualf)
-      
+      tt <- NULL      
+      tt$res.all <- ss      
     }
+                         
+    call <- list(fixed=fixed,random=random,residual=residual)    
+    org.par <- list(es0.file=es0.file,softp=softp,
+                    trait=trait,family=family,#trait.mod=trait.mod,
+                    weights=weights,selfing=selfing,
+                    fixed=fixed,random=random,residual=residual,
+                    mulT=mulT,mulN=mulN,mulp=mulp,
+                    met=met,trace=trace,delf=delf,
+                    Fmv=Fmv,mu.delete=mu.delete,
+                    cycle=cycle,call=call,
+                    run.purrr=run.purrr,
+                    batch0=batch0,batch=batch,
+                    batch.G=batch.G,batch.R=batch.R,
+                    subF=subF,subV.org=subV.org, 
+                    #subV.Lv=subV.Lv,subV.new=subV.new,
+                    res.no=res.no,dat.file=dat.file,
+                    predict=predict,vpredict=vpredict,
+                    qualifier=qualifier,jobqualf=jobqualf)                      
     
     tt$org.par <- org.par
     
