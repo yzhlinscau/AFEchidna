@@ -769,6 +769,8 @@ run.mod <- function(es0.file,softp=NULL,
   vptxt[2]<-'vpredict'
   vptxt[3]<-'W components'
   if(!is.null(vpredict)){
+    vpredict <- gsub('\\:xfa','.xfa',vpredict)
+    vpredict <- gsub('\\:fa','.fa',vpredict)
     vptxt2<-sapply(1:length(vpredict), function(x) vpredict[x])
   }
   vptxt<-c(vptxt,vptxt2)
