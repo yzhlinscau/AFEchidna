@@ -143,7 +143,9 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
   org.path <- getwd()
   
   path0 <- 'C:/ProgramData/Echidna.bin'#getwd() 
-  softf <- paste0(path0,'/Echidna.exe')
+  
+  if(.Platform$OS.type == "Linux")   softf <- paste0(path0,'/Echidna') 
+  if(.Platform$OS.type == "windows") softf <- paste0(path0,'/Echidna.exe')
     
   #if(update==FALSE & file.exists(softf)) invisible(softf)
     
@@ -154,7 +156,10 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
         file.remove(dir())
       } else dir.create(path0)
       
-      if(is.null(soft.path)) soft.path<-system.file('extdata/bin', package='AFEchidna')
+      if(is.null(soft.path)) 
+         soft.path <- ifelse(as.character(Sys.info()["sysname"])=="Linux",
+                              system.file("extdata/bin2", package = "AFEchidna"),
+                              system.file("extdata/bin", package = "AFEchidna"))
       setwd(soft.path)
       file.copy(from=dir(),to=path0, overwrite=TRUE)
       
