@@ -149,7 +149,7 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
     
   #if(update==FALSE & file.exists(softf)) invisible(softf)
     
-  if(update==TRUE|!file.exists(softf)){
+  if(update==TRUE|!dir.exists(path0)){
       
       if(update==TRUE){
         setwd(path0)
