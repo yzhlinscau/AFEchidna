@@ -142,14 +142,19 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
   
   org.path <- getwd()
   
-  path0 <- 'C:/ProgramData/Echidna.bin'#getwd() 
-  softf <- paste0(path0,'/Echidna')
-  #if(.Platform$OS.type == "Linux")   softf <- paste0(path0,'/Echidna') 
-  #if(.Platform$OS.type == "windows") softf <- paste0(path0,'/Echidna.exe')
+  path0 <- NULL
+  softf <- NULL
+
+  if(.Platform$OS.type == "Linux"){
+    path0 <- system.file("extdata/bin2", package = "AFEchidna")
+    softf <- paste0(path0,'/Echidna')  
+  } 
+  
+  if(.Platform$OS.type == "windows") {
+     path0 <- 'C:/ProgramData/Echidna.bin'#getwd() 
+     softf <- paste0(path0,'/Echidna')
     
-  #if(update==FALSE & file.exists(softf)) invisible(softf)
-    
-  if(update==TRUE|!dir.exists(path0)){
+    if(update==TRUE|!dir.exists(path0)){
       
       if(update==TRUE){
         setwd(path0)
@@ -157,9 +162,8 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
       } else dir.create(path0)
       
       if(is.null(soft.path)) 
-         soft.path <- ifelse(.Platform$OS.type =="Linux",
-                              system.file("extdata/bin2", package = "AFEchidna"),
-                              system.file("extdata/bin", package = "AFEchidna"))
+         soft.path <- system.file("extdata/bin", package = "AFEchidna")
+         
       setwd(soft.path)
       file.copy(from=dir(),to=path0, overwrite=TRUE)
       
@@ -169,6 +173,7 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
       if(update==TRUE)
        cat('Echidna software has been updated to the latest version:',vfile,'.\n')
       
+    }
   }
   setwd(org.path) 
   
