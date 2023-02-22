@@ -92,7 +92,7 @@
   #assign("Echsf", Echsf)#, envir = .GlobalEnv
 
 
-  invisible()
+ # invisible()
   
 }
 
@@ -121,7 +121,7 @@ getRid<-function(){
     }else message('\nWelcome to the world of AFEchidna.\n--------- Yuanzhen Lin (SCAU)')
   } else message('\nWelcome to the world of AFEchidna.\n--------- Yuanzhen Lin (SCAU)')
   
-  invisible()
+ # invisible()
 }
 
 #' @export
@@ -142,18 +142,15 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
   
   org.path <- getwd()
   
-  path0 <- NULL
-  softf <- NULL
+    path0 <- NULL
+    softf <- NULL
 
-  if(.Platform$OS.type == "Linux" | .Platform$OS.type == "unix"){
-    #path0 <- system.file("extdata/bin2", package = "AFEchidna")
-    #softf <- paste0(path0,'/Echidna') 
-    path0  <- system.file("extdata/bin", package = "AFEchidna")
-    softf0 <- paste0(path0, "/Echidna.exe")
-    softf  <- paste('wine',softf0,sep=' ')
-  } 
+    path0 <-ifelse(.Platform$OS.type == "windows",  
+                   'C:/ProgramData/Echidna.bin', 
+                   '~/Echidna.bin')
+    softf <- paste0(path0,'/Echidna.exe')
+    if(.Platform$OS.type == "Linux" | .Platform$OS.type == "unix") softf  <- paste('wine',softf,sep=' ')
   
-  if(.Platform$OS.type == "windows") {
      path0 <- 'C:/ProgramData/Echidna.bin'#getwd() 
      softf <- paste0(path0,'/Echidna')
     
@@ -177,7 +174,6 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
        cat('Echidna software has been updated to the latest version:',vfile,'.\n')
       
     }
-  }
   setwd(org.path) 
   
   return(softf)
