@@ -51,6 +51,8 @@ AFEchidna::checkPack()  # check depended R packages
 
 ### First user
  If Echidna software is first time for user, user should register an email address as the method supplied in the manual (https://gitee.com/yzhlinscau/AFEchidna/tree/master/inst/doc/AFEchidna.Man.pdf).
+ 
+ For linux or unix user, user could install and set up the AFEchidna according to the manual(https://gitee.com/yzhlinscau/AFEchidna/tree/master/inst/doc/AFEchidna.on.linux.pdf).
 
 ### Software update
 If AFEchidna does not have new version, while there is a new version of Echidna, user could download the  new version from Echidna website, and then copy the soft path to the fucntion loadsoft() to update Echidna for AFEchidna. A simple case as following:
