@@ -23,26 +23,7 @@
   
   AFEchidna.version = "1.68 (2022-11-03)" # usually 2 months before it expires
   
-  
-  
-  ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  
-  ### check which version is more recent
-  
-  #yyy <- 1.8
-  
-  #chooseCRANmirror(ind=114)
-  
-  #xxx <- available.packages(contriburl = contrib.url(repos="http://mirror.las.iastate.edu/CRAN/", type = getOption("pkgType")))
-  
-  
-  #xxx <- available.packages()
-  
-  #current <- as.numeric(xxx["sommer","Version"])
-  
-  ### final check
-  
-  ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
   
   
   assign(".AFEchidna.version", AFEchidna.version, pos=match("package:AFEchidna", search()))
@@ -53,33 +34,6 @@
     packageStartupMessage("AFEchidna builds on the Echidna software.",appendLF=TRUE)
     packageStartupMessage("AFEchidna is for non-commercial academic use.",appendLF=TRUE)
     packageStartupMessage("Please do not share AFEchidna with anyone without my permission.",appendLF=TRUE)
-#     packageStartupMessage(cyan(paste("[]==============================================================[]")),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan(paste("[]   Added Functions for Echidna in R ", AFEchidna.version, "        []",sep="")),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan("[]   Author: YuanZhen Lin                                       []"),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan("[]   Dedicated to South China Agricultural University           []"),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan("[]   Type 'citation('AFEchidna')' to know how to cite AFEchidna []"),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan(paste("[]==============================================================[]")),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan("AFEchidna is not free, user should pay RMB 300 for it."),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan("If you wanna use AFEchidna, please email me (yzhlinscau@163.com)."),appendLF=TRUE)
-#     
-#     packageStartupMessage(cyan("Please do not share AFEchidna with anyone without my permission."),appendLF=TRUE)
-#     
-    #if(yyy > current){ # yyy < current in CRAN
-    #
-    #  packageStartupMessage(paste("Version",current,"is now available."),appendLF=TRUE) # version current
-    #
-    #  packageStartupMessage(paste("Please update 'sommer' installing the new version."),appendLF=TRUE) # version current
-    #
-    #}
-    
-    #print(image(diag(10),main="sommer 3.9"))
     
     #ssd <- Sys.Date()
     # getRid()
@@ -150,9 +104,6 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
                    '~/Echidna.bin')
     softf <- paste0(path0,'/Echidna.exe')
     if(.Platform$OS.type == "Linux" | .Platform$OS.type == "unix") softf  <- paste('wine',softf,sep=' ')
-  
-     path0 <- 'C:/ProgramData/Echidna.bin'#getwd() 
-     softf <- paste0(path0,'/Echidna')
     
     if(update==TRUE|!dir.exists(path0)){
       
