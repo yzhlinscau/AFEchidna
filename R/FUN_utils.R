@@ -150,7 +150,7 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
     #softf <- paste0(path0,'/Echidna') 
     path0  <- system.file("extdata/bin", package = "AFEchidna")
     softf0 <- paste0(path0, "/Echidna.exe")
-    softp  <- paste('wine',softf0,sep=' ')
+    softf  <- paste('wine',softf0,sep=' ')
   } 
   
   if(.Platform$OS.type == "windows") {
