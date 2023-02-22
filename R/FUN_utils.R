@@ -146,8 +146,11 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
   softf <- NULL
 
   if(.Platform$OS.type == "Linux"){
-    path0 <- system.file("extdata/bin2", package = "AFEchidna")
-    softf <- paste0(path0,'/Echidna')  
+    #path0 <- system.file("extdata/bin2", package = "AFEchidna")
+    #softf <- paste0(path0,'/Echidna') 
+    path0  <- system.file("extdata/bin", package = "AFEchidna")
+    softf0 <- paste0(path0, "/Echidna.exe")
+    softp  <- paste('wine',softf0,sep=' ')
   } 
   
   if(.Platform$OS.type == "windows") {
@@ -177,7 +180,7 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
   }
   setwd(org.path) 
   
-  invisible(softf)
+  return(softf)
 }
 
 ##file.exists('C:/ProgramData/Echidna.bin/Echidna.exe')
