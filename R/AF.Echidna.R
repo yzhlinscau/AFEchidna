@@ -322,10 +322,10 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
                                
   # get data file, maybe problem here!!!
   es0.txt <- base::readLines(es0.file)
-  datL <- es0.txt[grep('\\!SKIP',es0.txt)] # >=1
+  datL <- es0.txt[grep('\\![Ss][Kk][Ii][Pp]',es0.txt)] # >=1
   if(grepl('\\#',datL)) datL <- datL[-grep('\\#',datL)]
   lth <- length(datL)
-  dat.file0 <- sub('\\s+\\!SKIP.*','',datL[lth])
+  dat.file0 <- sub('\\s+\\![Ss][Kk][Ii][Pp].*','',datL[lth])
   if(is.null(dat.file)) dat.file <- dat.file0 else dat.file <- dat.file                               
   
   test<-function(mode=c("batch.Y", "batch.G", "batch.R", 'subF' )){
