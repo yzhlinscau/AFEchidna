@@ -145,7 +145,7 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
   path0 <- NULL
   softf <- NULL
 
-  if(.Platform$OS.type == "Linux"){
+  if(.Platform$OS.type == "Linux" | .Platform$OS.type == "unix"){
     #path0 <- system.file("extdata/bin2", package = "AFEchidna")
     #softf <- paste0(path0,'/Echidna') 
     path0  <- system.file("extdata/bin", package = "AFEchidna")
