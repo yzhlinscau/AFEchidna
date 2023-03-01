@@ -2362,7 +2362,8 @@ raneff.acc <- function(object, ran.eff, Var, ped=NULL) {
     }
     
     cat('Var is:',Var,'; Fi is inbreeding coefficient.')
-    cat('\naccurancy formula: sqrt(1-SE^2/((1+Fi)*Var))\n') 
+    cat('\naccurancy formula: sqrt(1-SE^2/((1+Fi)*Var))\n')
+    ran.eff$SE<-as.numeric(ran.eff$SE)
     ran.eff<- transform(ran.eff,accuracy=sqrt(1-SE^2/((1+Fi)*Var)))
     
     names(ran.eff)[ncol(ran.eff)]<-'accuracy'
