@@ -1374,7 +1374,7 @@ evp.res <- function(evp) {
 #' @aliases plot
 #' @param object an object of Echidna-R result.
 #' @param idx  trait order(1,2,...) when use !cycle in Echidna.
-#' @param mulT	  multi-trait model,FALSE(default). 
+#  @param mulT	  multi-trait model,FALSE(default). 
 #' @param meanN  make hat(y) higher than 4*mean(y) to NA.
 #'
 # @export
@@ -1405,7 +1405,7 @@ evp.res <- function(evp) {
 #' }
 #'
 #' @export
-plot <- function(object,idx=NULL,mulT=FALSE,meanN=2.5){
+plot <- function(object,idx=NULL,meanN=2.5){ # mulT=FALSE,
   UseMethod("plot",object)
 }
 #' @method  plot esR
@@ -1413,10 +1413,11 @@ plot <- function(object,idx=NULL,mulT=FALSE,meanN=2.5){
 #' @rdname  plot
 #' @export
 #'
-plot.esR <- function(object,idx=NULL,mulT=FALSE,meanN=2.5) {
+plot.esR <- function(object,idx=NULL,meanN=2.5) { # mulT=FALSE,
   #object<-res
   
   if(object$org.par$batch==FALSE){
+    mulT<-object$org.par$mulT
     if(is.null(object$yht)) stop('Please use !view in Echidna.')
     
     if(mulT==TRUE){# mulT=T, each trait y: y-resid, x: y-hat
