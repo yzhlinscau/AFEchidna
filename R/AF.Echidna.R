@@ -1339,8 +1339,10 @@ esr.res <- function(esr, mulT=FALSE,met=FALSE) {
     
     #tt='Finished: Wed Dec 30 13:05:02 2020 LogL NOT Converged  teaching'
     cg.patt<-"(LogL.*Converged)"
-    aa<-stringr::str_extract(string =tt$FinishAt, pattern = cg.patt)[[1]]
-    if(aa=="LogL Converged") tt$Converge<- TRUE else tt$Converge<- FALSE
+    if(!is.na(tt$FinishAt)){
+       aa<-stringr::str_extract(string =tt$FinishAt, pattern = cg.patt)[[1]]
+       if(aa=="LogL Converged") tt$Converge<- TRUE else tt$Converge<- FALSE
+    }else tt$Converge<-NA
     
   return(tt)
 }  
