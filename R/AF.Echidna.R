@@ -1,6 +1,6 @@
 ## version: public
 
-# update: 2023-01-28
+# update: 2023-03-01
 #' @title Summary of added functions for Echidna
 #' 
 #' @param dat.file	 data file to generate .es file.
@@ -158,7 +158,10 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
      else {
       esjob <- dat.file# esjob<-'fm.csv'
       runes <- paste(Echsf, esjob, sep = " ")
-      system(runes, show.output.on.console = TRUE, wait = FALSE, invisible = mess1)
+      ifelse(.Platform$OS.type == "windows",
+         system(runes, show.output.on.console = TRUE, wait = FALSE, 
+             invisible = mess1),
+         system(runes))
       #system2(Echsf, args=esjob, wait = FALSE, invisible = mess1)
       
       #flst <- dir()
@@ -252,7 +255,7 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
     
     cat("Generating .es0 file:", "-- done!\n") # temp,
     
-    invisible()
+    #invisible()
   }
   
 }
@@ -3279,7 +3282,7 @@ met.corr <- function(object,siteV,kN=NULL,horiz=TRUE,rotate=FALSE) {
   if(horiz) print(t(cl.res)) else print.data.frame(cl.res)
   cat('\n')
   
-  invisible(df)
+  if(.Platform$OS.type == "windows") invisible(df)
 }
 
 #' @usage met.biplot(object,siteV,biplot=FALSE, dSco.u=NULL,dLam.u=NULL)
