@@ -1100,7 +1100,7 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
     esrf<-flst[grep('\\.esr$',flst)]
     esr<-readr::read_file(file=esrf)
     
-    if(!any(grepl('_e.R$',flst))&cycle==FALSE) tt<-AFEchidna::esr.res(esr, mulT=mulT, met=met)
+    #if(!any(grepl('_e.R$',flst))&cycle==FALSE) tt<-AFEchidna::esr.res(esr, mulT=mulT, met=met)
       
     tt$esr<-esr
   }
@@ -1342,7 +1342,7 @@ esr.res <- function(esr, mulT=FALSE,met=FALSE) {
     if(!is.na(tt$FinishAt)){
        aa<-stringr::str_extract(string =tt$FinishAt, pattern = cg.patt)[[1]]
        if(aa=="LogL Converged") tt$Converge<- TRUE else tt$Converge<- FALSE
-    }else tt$Converge<-NA
+    } # else tt$Converge<-NA
     
   return(tt)
 }  
