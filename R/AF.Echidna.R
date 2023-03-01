@@ -1078,19 +1078,20 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
 
   flst<-dir()
 
-  if(any(grepl('_e.R$',flst))){
-    Rresf<-flst[grep('_e.R$',flst)]
-
-    ff<-readr::read_file(file=Rresf)
-    ff<-paste0('mm=function(){',ff,'}')
-    if(grepl('Vpredict',ff))  ff<-sub('Vpredict','if(0==1) Vpredict',ff)
-    readr::write_file(ff,'ff1.R')
-    tt<-source('ff1.R')$value()
-    file.remove('ff1.R')
-
-    aa<-strsplit(tt$FinishAt,'LogL ')[[1]][2]
-    if(aa=="Converged") tt$Converge<- TRUE else tt$Converge<- FALSE
-  } else tt<-list()
+# if(any(grepl('_e.R$',flst))){
+#   Rresf<-flst[grep('_e.R$',flst)]
+#   
+#   ff<-readr::read_file(file=Rresf)
+#   ff<-paste0('mm=function(){',ff,'}')
+#   if(grepl('Vpredict',ff))  ff<-sub('Vpredict','if(0==1) Vpredict',ff)
+#   readr::write_file(ff,'ff1.R')
+#   tt<-source('ff1.R')$value()
+#   file.remove('ff1.R')
+#   
+#   aa<-strsplit(tt$FinishAt,'LogL ')[[1]][2]
+#   if(aa=="Converged") tt$Converge<- TRUE else tt$Converge<- FALSE
+# } else 
+  tt<-list()
 
   tt<-tt[!sapply(tt, is.null)]
 
