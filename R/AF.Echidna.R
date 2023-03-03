@@ -808,7 +808,9 @@ run.mod <- function(es0.file,softp=NULL,
   esjob<-'temp.es'
   runes<-paste(Echsf,esjob,sep=' ')
   
-  system(runes,show.output.on.console=FALSE) # run program
+  ifelse(.Platform$OS.type == "windows",
+         system(runes,show.output.on.console=FALSE), # run program
+         system(runes))
   
   es0.path<-getwd()
   df<-AFEchidna::esRT(es0.path,trace=FALSE,mulT=mulT,met=met,
