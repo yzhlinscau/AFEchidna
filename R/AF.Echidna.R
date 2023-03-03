@@ -569,7 +569,8 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       
       dat$nSite <- NULL
       write.csv(dat,file=dat.file,row.names=FALSE)
-      file.remove(org.datf)      
+      file.remove(org.datf) 
+      unlink(org.datf,force=TRUE)                   
       cat('works done.\n')
       
       tt <- NULL      
@@ -802,6 +803,7 @@ run.mod <- function(es0.file,softp=NULL,
     file.append('temp','temp.es')
     file.copy('temp','temp.es',overwrite=TRUE)
     file.remove('temp')
+    unlink('temp',force=TRUE)
   }
   
   #dir()
@@ -859,7 +861,7 @@ run.mod <- function(es0.file,softp=NULL,
   dlst<-dlst[dlst!=esv]
   #dlst<-dlst[!grep('\\.esv$',dlst)]
   
-  if(delf==TRUE) file.remove(dlst)
+  if(delf==TRUE) {file.remove(dlst);unlink(dlst,force=TRUE)}
   if(delf==FALSE) {
     if(!is.null(foldN))  new_dir<-foldN
     if(is.null(foldN)) {
@@ -869,11 +871,13 @@ run.mod <- function(es0.file,softp=NULL,
     for(file in dlst) file.copy(file,new_dir, overwrite=TRUE)
     
     file.remove(dlst)
+    unlink(dlst,force=TRUE)
   }
   
   dlst0<-dir(".", pattern="^temp")
   dlst0<-dlst0[!grepl('\\.esv$',dlst0)]
   file.remove(dlst0)
+  unlink(dlst0,force=TRUE)
   #file.remove('fort.13')
   
   return(df)
