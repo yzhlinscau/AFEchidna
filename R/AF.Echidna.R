@@ -1136,6 +1136,8 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
        
        tt$coef <- df1
        rm(df,df0,df1,dfL)
+       file.remove(essf)
+       unlink(essf,force=TRUE)
        ## new here
        
      #  if(length(skipn)!=0) tt$coef <- utils::read.csv(file=essf,header=TRUE,skip=skipn)
