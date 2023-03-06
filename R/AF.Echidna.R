@@ -332,7 +332,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
   if(is.null(dat.file)) dat.file <- dat.file0 else dat.file <- dat.file                               
   
   test<-function(mode=c("batch.Y", "batch.G", "batch.R", 'subF' )){
-    
+    tt<-NULL
     mode <- switch(mode, "batch.Y" = 1, "batch.G" = 2,
                     "batch.R" = 3,'subF' = 4 )
     
@@ -413,7 +413,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       NTrait <- gsub(' ','-',NTrait)
       NTrait <- sub('-$','',NTrait)
       
-      tt <- tt1 <- NULL
+      #tt <- tt1 <- NULL
       
       if(batch==FALSE) {
         tt <- ss
@@ -475,7 +475,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       if(!run.purrr) ss <- lapply(1:ttN, run.fun2) 
         else ss <- 1:ttN %>% purrr::map( run.fun2 )       
       names(ss) <- ran0     
-      tt <- NULL      
+      #tt <- NULL      
       tt$res.all <- ss 
     }
     
@@ -573,7 +573,7 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
       unlink(org.datf,force=TRUE)                   
       cat('works done.\n')
       
-      tt <- NULL      
+      #tt <- NULL      
       tt$res.all <- ss      
     }
                          
@@ -602,17 +602,16 @@ echidna <- function(fixed=NULL,random=NULL,residual=NULL,
     return(tt)
   }
   
+  res<-NULL
   if(subF==FALSE){
-    if(batch.G==FALSE & batch.R==FALSE)  tt <- test(mode="batch.Y")
-    if(batch.G==TRUE  & batch.R==FALSE)  tt <- test(mode="batch.G")
-    if(batch.R==TRUE  & batch.G==FALSE)  tt <- test(mode="batch.R")
+    if(batch.G==FALSE & batch.R==FALSE)  res <- test(mode="batch.Y")
+    if(batch.G==TRUE  & batch.R==FALSE)  res <- test(mode="batch.G")
+    if(batch.R==TRUE  & batch.G==FALSE)  res <- test(mode="batch.R")
   }
-  if(subF==TRUE) tt <- test(mode="subF")
+  if(subF==TRUE) res <- test(mode="subF")
       
-  return(tt)
+  return(res)
 }
-
-
 
 
 #' @export
@@ -632,12 +631,12 @@ run.mod <- function(es0.file,softp=NULL,
   if(!is.null(softp)) Echsf <- softp
   
   #setwd(es0.path)
-  flst <- dir()
+  flst0 <- dir()
 
   if(is.null(es0.file)) stop('Needs an .es0 file.\n')
   # if(met==TRUE) mulT <- TRUE
   
-  flst0 <- flst
+  #flst0 <- flst
   
   if(class(fixed)=="formula") {
     fixed1 <- as.character(fixed)
@@ -815,6 +814,7 @@ run.mod <- function(es0.file,softp=NULL,
          system(runes))
   
   es0.path<-getwd()
+  df<-NULL
   df<-AFEchidna::esRT(es0.path,trace=FALSE,mulT=mulT,met=met,
                       cycle=cycle,vpredict=vpredict)
   
@@ -858,10 +858,10 @@ run.mod <- function(es0.file,softp=NULL,
   flst<-dir()
   dlst<-base::setdiff(flst,flst0)
   esv<-flst[grep('\\.esv$',flst)]
-  dlst<-dlst[dlst!=esv]
+  dlst2<-dlst[dlst!=esv]
   #dlst<-dlst[!grep('\\.esv$',dlst)]
   
-  if(delf==TRUE) {file.remove(dlst);unlink(dlst,force=TRUE)}
+  if(delf==TRUE) file.remove(dlst2)
   if(delf==FALSE) {
     if(!is.null(foldN))  new_dir<-foldN
     if(is.null(foldN)) {
@@ -870,14 +870,14 @@ run.mod <- function(es0.file,softp=NULL,
     if(!dir.exists(new_dir)) dir.create(new_dir)
     for(file in dlst) file.copy(file,new_dir, overwrite=TRUE)
     
-    file.remove(dlst)
-    unlink(dlst,force=TRUE)
+    file.remove(dlst2)
+    #unlink(dlst2,force=TRUE)
   }
   
   dlst0<-dir(".", pattern="^temp")
-  dlst0<-dlst0[!grepl('\\.esv$',dlst0)]
+  dlst0<-dlst0[dlst0!=esv]
   file.remove(dlst0)
-  unlink(dlst0,force=TRUE)
+  #unlink(dlst0,force=TRUE)
   #file.remove('fort.13')
   
   return(df)
@@ -1099,14 +1099,14 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
 # } else 
   tt<-list()
 
-  tt<-tt[!sapply(tt, is.null)]
+  #tt<-tt[!sapply(tt, is.null)]
 
   ## input .esr results
   if(length(grep('\\.esr$',flst))==1) {
     esrf<-flst[grep('\\.esr$',flst)]
     esr<-readr::read_file(file=esrf)
     
-    #if(!any(grepl('_e.R$',flst))&cycle==FALSE) tt<-AFEchidna::esr.res(esr, mulT=mulT, met=met)
+    if(cycle==FALSE) tt<-AFEchidna::esr.res(esr, mulT=mulT, met=met)
       
     tt$esr<-esr
   }
@@ -1133,15 +1133,12 @@ esRT0 <- function(path,trace=FALSE,mulT=FALSE,met=FALSE,
        df0<-do.call('rbind',dfL)
        df1<-as.data.frame(df0[-1,])
        names(df1)<-df0[1,]
+       for(i in 3:4) df1[,i]<-as.numeric(df1[,i])
        
        tt$coef <- df1
        rm(df,df0,df1,dfL)
-       file.remove(essf)
-       unlink(essf,force=TRUE)
-       ## new here
-       
-     #  if(length(skipn)!=0) tt$coef <- utils::read.csv(file=essf,header=TRUE,skip=skipn)
-     #    else tt$coef <- utils::read.csv(file=essf,header=TRUE)
+       #file.remove(essf)
+       #unlink(essf,force=TRUE)
      }
   }
 
