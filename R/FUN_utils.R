@@ -103,7 +103,7 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
                    'C:/ProgramData/Echidna.bin', 
                    '~/Echidna.bin')
     softf <- paste0(path0,'/Echidna.exe')
-    if(.Platform$OS.type == "linux" | .Platform$OS.type == "unix") softf  <- paste('wine',softf,sep=' ')
+    if(.Platform$OS.type != "windows" ) softf  <- paste('wine',softf,sep=' ')
     
     if(update==TRUE|!dir.exists(path0)){
       
