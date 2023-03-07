@@ -877,6 +877,8 @@ run.mod <- function(es0.file,softp=NULL,
   dlst0<-dir(".", pattern="^temp")
   dlst0<-dlst0[dlst0!=esv]
   file.remove(dlst0)
+  base::on.exit('temp.ess')
+  file.remove('temp.ess')
   #unlink(dlst0,force=TRUE)
   #file.remove('fort.13')
   
