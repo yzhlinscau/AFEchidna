@@ -21,7 +21,7 @@
          
          pos=match("package:AFEchidna", search()))
   
-  AFEchidna.version = "1.68 (2022-11-03)" # usually 2 months before it expires
+  AFEchidna.version = "1.68 (2023-04-03)" # usually 2 months before it expires
   
 
   
@@ -99,11 +99,12 @@ loadsoft <- function(update=FALSE, soft.path=NULL){
     path0 <- NULL
     softf <- NULL
 
-    path0 <-ifelse(.Platform$OS.type == "windows",  
-                   'C:/ProgramData/Echidna.bin', 
-                   '~/Echidna.bin')
+    #path0 <-ifelse(.Platform$OS.type == "windows",  
+    #               'C:/ProgramData/Echidna.bin', 
+    #               '~/Echidna.bin')
+    path0 <- 'C:/ProgramData/Echidna.bin'
     softf <- paste0(path0,'/Echidna.exe')
-    if(.Platform$OS.type != "windows" ) softf  <- paste('wine',softf,sep=' ')
+    #if(.Platform$OS.type != "windows" ) softf  <- paste('wine',softf,sep=' ')
     
     if(update==TRUE|!dir.exists(path0)){
       
@@ -154,3 +155,14 @@ nfile.copy <- function(version=153, path0=NULL, path1=NULL) {
   
 }
 
+#' @export
+############### set up softp for working in linux
+
+linux.softp <- function() {
+  path0 <- system.file("extdata/bin", package = "AFEchidna")
+  softf <- paste0(path0, "/Echidna.exe")
+  softp0 <- paste('wine',softf, sep=' ')
+  return(softp0)
+}
+
+#linux.softp()
