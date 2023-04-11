@@ -158,10 +158,11 @@ get.es0.file <- function(dat.file=NULL,es.file=NULL,path=NULL,
      else {
       esjob <- dat.file# esjob<-'fm.csv'
       runes <- paste(Echsf, esjob, sep = " ")
-      ifelse(.Platform$OS.type == "windows",
-         system(runes, show.output.on.console = TRUE, wait = FALSE, 
-             invisible = mess1),
-         system(runes))
+      #ifelse(.Platform$OS.type == "windows",
+      #   system(runes, show.output.on.console = TRUE, wait = FALSE, 
+      #       invisible = mess1),
+      #   system(runes))
+      system(runes, show.output.on.console = TRUE, wait = FALSE,invisible = mess1)
       #system2(Echsf, args=esjob, wait = FALSE, invisible = mess1)
       
       #flst <- dir()
