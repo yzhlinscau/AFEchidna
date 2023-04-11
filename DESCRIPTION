@@ -6,8 +6,8 @@ Author: Yuanzhen Lin
 Maintainer: Yuanzhen Lin <yzhlinscau@163.com>
 Description: This package adds some R functions for Echidna v-1.68. AFEchidna builds on the Echidna software. AFEchidna is for non-commercial academic use.
 Depends: R (>= 4.0.0)
-Imports:  dplyr, msm, readr,reshape, stringr,tidyr,utils, stats,MASS
-Suggests:  agricolae,amap,desplot, DT, GeneticsPed, ggplot2, knitr, nadiv,pedigree
+#Imports:  dplyr, msm, readr,reshape, stringr,tidyr,utils, stats,MASS
+Suggests:  agricolae,amap,desplot, DT, GeneticsPed, ggplot2, knitr, nadiv,pedigree,dplyr, msm, readr,reshape, stringr,tidyr,utils, stats,MASS
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
