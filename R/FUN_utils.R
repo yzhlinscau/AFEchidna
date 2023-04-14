@@ -166,3 +166,96 @@ linux.softp <- function() {
 }
 
 #linux.softp()
+
+
+#' @export
+subF1 <- function(fixed,random,residual,
+                  es0.file,
+                  trace=T,met=T,
+                  subV.org,subV.Lv=NULL,
+                  mulN=NULL,res.no=NULL,
+                  run.purrr=F,
+                  dat.file=NULL,...) {
+  
+  
+  # subF function
+  #if (as.numeric(mode)==4) {
+    batch0 <- TRUE
+    
+    # get data file, maybe problem here!!!
+    es0.txt <- base::readLines(es0.file)
+    datL <- es0.txt[grep('\\!SKIP',es0.txt)] # >=1
+    if(grepl('\\#',datL)) datL <- datL[-grep('\\#',datL)]
+    lth <- length(datL)
+    dat.file0 <- sub('\\s+\\!SKIP.*','',datL[lth])
+    if(is.null(dat.file)) dat.file <- dat.file0 else dat.file <- dat.file 
+    
+    # data file
+    dat <- read.csv(file=dat.file)
+    
+    # copy original data file and rename to an old.file
+    org.datf <- paste0('old.',dat.file)
+    write.csv(dat,file=org.datf,row.names=FALSE)
+    dat <- read.csv(file=org.datf)
+    
+    dat$nSite <- dat[,subV.org]
+    
+    if(is.null(subV.Lv)){
+      cat('Starting analysis.\n')
+      
+      cc <- unique(dat$nSite)
+      
+      if(is.null(mulN)) mulN <- 2 
+      else mulN <- mulN
+      
+      bb <- utils::combn(cc,mulN)
+      if(is.null(res.no)) bbn <- ncol(bb) 
+      else bbn <-res.no
+      
+      run.fun4 <- function(x){
+        #cc<-paste0('Site-',bb[1,x],':',bb[2,x])
+        cat('\nAnalysing---- ',paste(append(paste0('Site-'),bb[,x]), collapse = ":"))
+        
+        dat22 <- dat %>% filter(.,nSite %in% bb[,x])
+        #temp.datf<-paste0('new.',dat.file)
+        write.csv(dat22,file=dat.file,row.names=FALSE)
+        
+        #AFEchidna::subsetcc<-paste(append(paste0('!subset ',subV.new,' ', subV.org),bb[,x]), collapse = " ")
+        mm <- AFEchidna::run.mod(fixed=fixed,
+                                 random=random,
+                                 residual=residual,
+                                 #qualifier = subsetcc,
+                                 trace=trace,met=met,
+                                 es0.file = es0.file)
+      }
+      
+      ss <- vector("list", bbn)
+      if(!run.purrr) ss <- lapply(1:bbn, run.fun4 ) 
+      else ss <- 1:bbn %>% purrr::map(run.fun4 )
+      
+      names(ss) <- lapply(1:bbn, function(x) paste(append(paste0('Site-'),bb[,x]), collapse = ":"))
+      cat('works done.\n')
+      
+    }else{
+      dat22 <- dat %>% filter(.,nSite %in% subV.Lv)
+      write.csv(dat22,file=dat.file,row.names=FALSE)
+      
+      ss <- AFEchidna::run.mod(fixed=fixed,
+                               random=random,
+                               residual=residual,
+                               #qualifier = subsetcc,
+                               trace=trace,met=met,
+                               es0.file = es0.file)
+    }
+    
+    dat$nSite <- NULL
+    write.csv(dat,file=dat.file,row.names=FALSE)
+    file.remove(org.datf)      
+    #cat('works done.\n')
+    
+    tt <- NULL      
+    if(is.null(subV.Lv)) tt$res.all <- ss else tt <- ss      
+
+  class(tt) <- c('esR') 
+  
+}
