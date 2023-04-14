@@ -177,6 +177,7 @@ subF1 <- function(fixed,random,residual,
                   run.purrr=F,
                   dat.file=NULL,...) {
   
+  require(dplyr,warn.conflicts=FALSE,quietly=TRUE)
   
   # subF function
   #if (as.numeric(mode)==4) {
